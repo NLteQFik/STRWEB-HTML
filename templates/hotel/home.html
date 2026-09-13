@@ -1,0 +1,191 @@
+{% extends "hotel/base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<section id="company-logo" aria-labelledby="company-logo-heading">
+    <h1 id="company-logo-heading">Гостиница Aurora Hotel</h1>
+    <figure>
+        <img src="https://dummyimage.com/180x180/1e3a5f/fff&amp;text=Aurora" alt="Логотип компании Aurora Hotel" width="180" height="180" loading="eager">
+        <figcaption>Aurora Hotel — официальный логотип</figcaption>
+    </figure>
+</section>
+
+<section id="banners" aria-labelledby="banners-heading">
+    <h2 id="banners-heading">Реклама и спецпредложения</h2>
+    <figure>
+        <a href="{% url 'room_list' %}" title="Перейти: Раннее бронирование −15%">
+            <picture>
+                <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=960&amp;h=320&amp;fit=crop">
+                <source media="(max-width: 767px)" srcset="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=480&amp;h=640&amp;fit=crop">
+                <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=960&amp;h=320&amp;fit=crop" alt="Баннер: люкс со скидкой" width="960" height="320" loading="eager">
+            </picture>
+        </a>
+        <figcaption>Раннее бронирование −15%</figcaption>
+    </figure>
+    <figure>
+        <a href="{% url 'extra_service_list' %}" title="Перейти: SPA и завтраки">
+            <picture>
+                <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=960&amp;h=320&amp;fit=crop">
+                <source media="(max-width: 767px)" srcset="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=480&amp;h=640&amp;fit=crop">
+                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=960&amp;h=320&amp;fit=crop" alt="Баннер: SPA и завтраки в подарок" width="960" height="320" loading="lazy">
+            </picture>
+        </a>
+        <figcaption>SPA и завтраки в подарок</figcaption>
+    </figure>
+    <figure>
+        <picture>
+            <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=960&amp;h=320&amp;fit=crop">
+            <source media="(max-width: 767px)" srcset="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=480&amp;h=640&amp;fit=crop">
+            <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=960&amp;h=320&amp;fit=crop" alt="Баннер: семейные номера" width="960" height="320" loading="lazy">
+        </picture>
+        <figcaption>Семейные номера — 3-я ночь бесплатно</figcaption>
+    </figure>
+</section>
+
+<section aria-labelledby="tz-heading">
+    <h2 id="tz-heading">Дата и часовой пояс</h2>
+    <p><strong>Ваш пояс:</strong> {{ user_timezone_name }}</p>
+    <p><strong>Сейчас:</strong> <time datetime="{{ user_now|date:'c' }}">{{ user_now|date:"d/m/Y H:i" }}</time> ({{ weekday_name }})</p>
+    <p><strong>UTC:</strong> <time datetime="{{ user_now|date:'c' }}">{{ current_date_utc }}</time></p>
+    <p><strong>Локальное время:</strong> {{ current_datetime_user }}</p>
+    <form method="get" action="{% url 'set_timezone' %}">
+        <fieldset>
+            <legend>Смена пояса</legend>
+            <p>
+                <label for="home-tz">Пояс:</label>
+                <select id="home-tz" name="tz">
+                    <option value="Europe/Minsk">Минск</option>
+                    <option value="Europe/Moscow">Москва</option>
+                    <option value="Europe/London">Лондон</option>
+                    <option value="America/New_York">Нью-Йорк</option>
+                    <option value="Asia/Tokyo">Токио</option>
+                </select>
+                <button type="submit">Сменить пояс</button>
+            </p>
+        </fieldset>
+    </form>
+    <h3>Календарь</h3>
+    <pre title="Календарь текущего месяца">{{ text_calendar }}</pre>
+</section>
+<hr>
+
+{% if can_book %}
+<section aria-labelledby="booking-cta-heading">
+    <h2 id="booking-cta-heading">Бронирование</h2>
+    <p><a href="{% url 'booking_create' %}">Перейти к бронированию</a> | <a href="#cart-demo">Демо: корзина заказа</a></p>
+</section>
+{% endif %}
+
+<section id="latest-article" aria-labelledby="latest-article-heading">
+    <h2 id="latest-article-heading">Последняя опубликованная статья</h2>
+    {% if latest_article %}
+    <article>
+        <h3>{{ latest_article.title }}</h3>
+        <p><em>{{ latest_article.short_content }}</em></p>
+        <figure>
+            {% if latest_article.image %}
+                <img src="{{ latest_article.image.url }}" alt="Изображение новости {{ latest_article.title }}" width="320" loading="lazy">
+            {% else %}
+                <img src="https://dummyimage.com/300x200/4682b4/fff&amp;text=News" alt="Изображение новости {{ latest_article.title }}" width="320" loading="lazy">
+            {% endif %}
+            <figcaption>{{ latest_article.title }}</figcaption>
+        </figure>
+        <p><strong>Дата публикации (UTC):</strong> <time datetime="{{ latest_article.created_at|date:'c' }}">{{ latest_article_times.utc }}</time></p>
+        <p><strong>Дата публикации (ваша TZ):</strong> <time datetime="{{ latest_article.created_at|date:'c' }}">{{ latest_article_times.user }}</time></p>
+        <p><a href="{% url 'article_detail' latest_article.pk %}" title="Читать полную статью: {{ latest_article.title }}">Читать далее →</a></p>
+    </article>
+    {% else %}
+        <p>Новости пока отсутствуют.</p>
+    {% endif %}
+</section>
+
+<section id="catalog" aria-labelledby="catalog-heading">
+    <h2 id="catalog-heading">Каталог номеров и услуг</h2>
+    <p>Выберите номер и перейдите в <a href="{% url 'room_list' %}">полный каталог</a>.</p>
+    <form method="get">
+        <fieldset>
+            <legend>Фильтр номеров</legend>
+            <p>
+                <label for="home-category">Категория:</label>
+                <select id="home-category" name="category">
+                    <option value="">Все категории</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.pk }}" {% if request.GET.category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label for="home-min-price">Цена от:</label>
+                <input id="home-min-price" type="number" name="min_price" step="0.01" min="0" value="{{ request.GET.min_price }}">
+                <label for="home-max-price">Цена до:</label>
+                <input id="home-max-price" type="number" name="max_price" step="0.01" min="0" value="{{ request.GET.max_price }}">
+            </p>
+            <p><button type="submit">Применить</button> <a href="{% url 'home' %}">Сбросить</a></p>
+        </fieldset>
+    </form>
+    <ul>
+        {% for room in rooms %}
+            <li>
+                <article id="room-preview-{{ room.room_number }}">
+                    <h3>Номер {{ room.room_number }} — {{ room.category.name }}</h3>
+                    {% if room.photo %}<img src="{{ room.photo.url }}" alt="Фото номера {{ room.room_number }}" width="160" loading="lazy">{% else %}<img src="https://dummyimage.com/200x150/4682b4/fff&amp;text=Room+{{ room.room_number }}" alt="Фото номера {{ room.room_number }}" width="160" loading="lazy">{% endif %}
+                    <p>Цена: {{ room.category.base_price }} BYN / ночь</p>
+                    <p><a href="{% url 'room_detail' room.pk %}">Подробнее о номере</a></p>
+                </article>
+            </li>
+        {% empty %}
+            <li>Нет доступных записей.</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section id="cart-demo" aria-labelledby="cart-demo-heading">
+    <h2 id="cart-demo-heading">Корзина заказа (демо без бэкенда)</h2>
+    <p>Полный интерактив — в шаблонах <samp>hotel/cart.html</samp> и <samp>hotel/cart_payment.html</samp>. Здесь — якорь для боковой навигации.</p>
+    <p><a href="{% url 'booking_user' %}" title="Перейти к бронированиям (аналог корзины)">Перейти к бронированиям</a> | <a href="{% url 'payment_list' %}" title="Перейти к оплате">Перейти к оплате</a></p>
+</section>
+
+<section id="partners" aria-labelledby="partners-heading">
+    <h2 id="partners-heading">Компании-партнёры</h2>
+    <ul>
+        <li>
+            <figure>
+                <a href="https://www.booking.com/" rel="noopener noreferrer" target="_blank" title="Сайт Booking.com"><img src="https://dummyimage.com/160x80/003580/fff&amp;text=Booking" alt="Логотип партнёра Booking.com" width="160" height="80" loading="lazy"></a>
+                <figcaption><a href="https://www.booking.com/" rel="noopener noreferrer">Booking.com</a></figcaption>
+            </figure>
+        </li>
+        <li>
+            <figure>
+                <a href="https://www.tripadvisor.com/" rel="noopener noreferrer" target="_blank" title="Сайт Tripadvisor"><img src="https://dummyimage.com/160x80/00aa6c/fff&amp;text=TripAd" alt="Логотип партнёра Tripadvisor" width="160" height="80" loading="lazy"></a>
+                <figcaption><a href="https://www.tripadvisor.com/" rel="noopener noreferrer">Tripadvisor</a></figcaption>
+            </figure>
+        </li>
+        <li>
+            <figure>
+                <a href="https://www.airbnb.com/" rel="noopener noreferrer" target="_blank" title="Сайт Airbnb"><img src="https://dummyimage.com/160x80/ff5a5f/fff&amp;text=Airbnb" alt="Логотип партнёра Airbnb" width="160" height="80" loading="lazy"></a>
+                <figcaption><a href="https://www.airbnb.com/" rel="noopener noreferrer">Airbnb</a></figcaption>
+            </figure>
+        </li>
+    </ul>
+</section>
+
+<section aria-labelledby="extra-heading">
+    <h2 id="extra-heading">Дополнительная информация</h2>
+    <h3>Погода в {{ weather_city }}</h3>
+    {% if weather_data.has_error %}
+        <p>Данные о погоде временно недоступны.</p>
+    {% else %}
+        <p>Температура: {{ weather_data.temperature_c }} °C</p>
+        <p>Состояние: {{ weather_data.description }}</p>
+        <p>Влажность: {{ weather_data.humidity }}%</p>
+    {% endif %}
+    <h3>Курсы валют (за 1 {{ currency_base }})</h3>
+    {% if currency_data.has_error %}
+        <p>Данные о курсах временно недоступны.</p>
+    {% else %}
+        <p>1 USD = {{ currency_data.USD|floatformat:2 }} BYN</p>
+        <p>1 EUR = {{ currency_data.EUR|floatformat:2 }} BYN</p>
+        <p>1 CNY = {{ currency_data.CNY|floatformat:2 }} BYN</p>
+        <p>100 RUB = {{ currency_data.RUB|floatformat:2 }} BYN</p>
+    {% endif %}
+</section>
+{% endblock %}

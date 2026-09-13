@@ -1,0 +1,26 @@
+{% extends "hotel/base.html" %}
+{% block title %}Редактирование брони{% endblock %}
+{% block content %}
+<h1>Редактирование бронирования</h1>
+{% if form.instance.pk %}
+<p>Создано: UTC {{ created_times.utc }} | Локально {{ created_times.user }}</p>
+<p>Обновлено: UTC {{ updated_times.utc }} | Локально {{ updated_times.user }}</p>
+<hr>
+{% endif %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+    {% for field in form %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}<br>
+            {{ field.errors }}
+        </p>
+    {% endfor %}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "hotel/base.html" %}
+{% block title %}Оплата заказа — Aurora Hotel{% endblock %}
+{% block content %}
+<section id="payment" aria-labelledby="payment-heading">
+    <h1 id="payment-heading">Оплата товаров</h1>
+    <p><a href="{% url 'booking_user' %}">← Вернуться в корзину (бронирования)</a> | <a href="{% url 'payment_list' %}">Живой аналог: список платежей</a></p>
+    <p><em>Демо-шаблон без бэкенда: состав заказа статический, форма — демонстрация контролов.</em></p>
+
+    <section aria-labelledby="payment-summary-heading">
+        <h2 id="payment-summary-heading">Состав заказа</h2>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <caption>Товары и услуги в корзине перед оплатой</caption>
+            <thead>
+                <tr>
+                    <th id="col-room" scope="col">Номер</th>
+                    <th id="col-category" scope="col">Категория</th>
+                    <th id="col-qty" scope="col">Кол-во ночей</th>
+                    <th id="col-price" scope="col">Цена/ночь</th>
+                    <th id="col-total" scope="col">Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th id="row-room-101" scope="row" headers="col-room">101</th>
+                    <td headers="col-category row-room-101">Стандарт</td>
+                    <td headers="col-qty row-room-101">2</td>
+                    <td headers="col-price row-room-101">100 BYN</td>
+                    <td headers="col-total row-room-101">200 BYN</td>
+                </tr>
+                <tr>
+                    <th id="row-room-202" scope="row" headers="col-room">202</th>
+                    <td headers="col-category row-room-202">Люкс</td>
+                    <td headers="col-qty row-room-202">1</td>
+                    <td headers="col-price row-room-202">250 BYN</td>
+                    <td headers="col-total row-room-202">250 BYN</td>
+                </tr>
+                <tr>
+                    <th id="row-total" scope="row" colspan="4" headers="col-room col-category col-qty col-price">Итого к оплате</th>
+                    <td headers="col-total row-total"><strong>450 BYN</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section aria-labelledby="payment-form-heading">
+        <h2 id="payment-form-heading">Данные для оплаты</h2>
+        <form method="post" action="{% url 'payment_list' %}" novalidate>
+            {% csrf_token %}
+            <fieldset>
+                <legend>Карта и плательщик</legend>
+                <p>
+                    <label for="pay-name">Держатель карты:</label>
+                    <input id="pay-name" name="cardholder" type="text" required minlength="3" maxlength="100" placeholder="IVANOV IVAN" autocomplete="cc-name">
+                </p>
+                <p>
+                    <label for="pay-card">Номер карты:</label>
+                    <input id="pay-card" name="card" type="text" required pattern="^\d{4} \d{4} \d{4} \d{4}$" placeholder="1111 2222 3333 4444" title="Формат: 1111 2222 3333 4444" autocomplete="cc-number" inputmode="numeric">
+                </p>
+                <p>
+                    <label for="pay-exp">Срок действия:</label>
+                    <input id="pay-exp" name="exp" type="month" required>
+                    <label for="pay-cvc">CVC:</label>
+                    <input id="pay-cvc" name="cvc" type="password" required minlength="3" maxlength="4" pattern="^\d{3,4}$" title="3-4 цифры" inputmode="numeric">
+                </p>
+                <p>
+                    <label for="pay-email">Email для чека:</label>
+                    <input id="pay-email" name="email" type="email" required placeholder="guest@example.com" autocomplete="email">
+                </p>
+                <p>
+                    <label for="pay-method">Способ оплаты:</label>
+                    <select id="pay-method" name="method" required>
+                        <option value="">— выберите —</option>
+                        <option value="card">Банковская карта</option>
+                        <option value="erip">ЕРИП</option>
+                        <option value="cash">Наличные на ресепшене</option>
+                    </select>
+                </p>
+                <p>
+                    <label><input type="checkbox" name="agree" value="1" required> Согласен с политикой конфиденциальности</label>
+                </p>
+            </fieldset>
+            <p><button type="submit" title="Подтвердить оплату заказа">Оплатить 450 BYN</button></p>
+        </form>
+    </section>
+</section>
+{% endblock %}

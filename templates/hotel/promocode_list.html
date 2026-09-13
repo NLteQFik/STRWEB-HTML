@@ -1,0 +1,65 @@
+{% extends "hotel/base.html" %}
+{% block title %}Промокоды{% endblock %}
+{% block content %}
+<h1>Промокоды и купоны</h1>
+{% if user.is_superuser %}
+    <p><a href="{% url 'promocode_create' %}">Добавить промокод</a></p>
+{% endif %}
+<form method="get">
+    <fieldset>
+        <legend>Поиск промокодов</legend>
+        <p>
+            <label for="promo-q">Код:</label>
+            <input id="promo-q" type="search" name="q" value="{{ query }}" placeholder="Поиск по коду">
+            <label for="promo-sort">Сортировка:</label>
+            <select id="promo-sort" name="sort">
+                <option value="code" {% if selected_sort == "code" %}selected{% endif %}>Код А-Я</option>
+                <option value="-code" {% if selected_sort == "-code" %}selected{% endif %}>Код Я-А</option>
+                <option value="discount_percent" {% if selected_sort == "discount_percent" %}selected{% endif %}>Скидка ↑</option>
+                <option value="-discount_percent" {% if selected_sort == "-discount_percent" %}selected{% endif %}>Скидка ↓</option>
+            </select>
+            <button type="submit">Применить</button>
+        </p>
+    </fieldset>
+</form>
+
+<details open>
+    <summary>Действующие</summary>
+    <ul>
+        {% for code in active_codes %}
+            <li>
+                <article>
+                    <h2>{{ code.code }}</h2>
+                    <p><strong>Скидка:</strong> {{ code.discount_percent }}%</p>
+                    <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ code.created_at|date:'c' }}">{{ code.created_at|date:"d/m/Y" }}</time></p>
+                    {% if user.is_superuser %}
+                        <p><a href="{% url 'promocode_update' code.pk %}">Редактировать</a> | <a href="{% url 'promocode_delete' code.pk %}">Удалить</a></p>
+                    {% endif %}
+                </article>
+            </li>
+        {% empty %}
+            <li>Активных промокодов нет.</li>
+        {% endfor %}
+    </ul>
+</details>
+
+<details>
+    <summary>Архивные</summary>
+    <ul>
+        {% for code in archived_codes %}
+            <li>
+                <article>
+                    <h2>{{ code.code }}</h2>
+                    <p><strong>Скидка:</strong> {{ code.discount_percent }}%</p>
+                    <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ code.created_at|date:'c' }}">{{ code.created_at|date:"d/m/Y" }}</time></p>
+                    {% if user.is_superuser %}
+                        <p><a href="{% url 'promocode_update' code.pk %}">Редактировать</a> | <a href="{% url 'promocode_delete' code.pk %}">Удалить</a></p>
+                    {% endif %}
+                </article>
+            </li>
+        {% empty %}
+            <li>Архив пуст.</li>
+        {% endfor %}
+    </ul>
+</details>
+{% endblock %}

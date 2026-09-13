@@ -1,0 +1,29 @@
+{% extends "hotel/base.html" %}
+{% block title %}Клиенты{% endblock %}
+{% block content %}
+<h1>Клиенты</h1>
+<a href="{% url 'client_create' %}">Создать клиента</a>
+<form method="get">
+    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Поиск по ФИО">
+    <button type="submit">Найти</button>
+</form>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>ФИО</th><th>Телефон</th><th>Детей</th><th>Комментарий</th><th>Действия</th>
+    </tr>
+    {% for client in clients %}
+        <tr>
+            <td>{{ client.full_name }}</td>
+            <td>{{ client.phone }}</td>
+            <td>{{ client.children_count }}</td>
+            <td>{{ client.comment|default:"" }}</td>
+            <td>
+                <a href="{% url 'client_update' client.pk %}">Редактировать</a> |
+                <a href="{% url 'client_delete' client.pk %}">Удалить</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5">Клиенты не найдены.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

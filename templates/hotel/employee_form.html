@@ -1,0 +1,30 @@
+{% extends "hotel/base.html" %}
+{% block title %}{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} сотрудника{% endblock %}
+{% block content %}
+<h1>{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} сотрудника</h1>
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+    {% for field in form %}
+        {% if field.name != "user" %}
+        <p>
+            {{ field.label_tag }}<br>
+            {% if field.name == "birth_date" and field.value %}
+                <span>Текущая дата рождения: {{ field.value|date:"d.m.Y" }}</span><br>
+            {% endif %}
+            {{ field }}<br>
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <span>{{ error }}</span><br>
+                {% endfor %}
+            {% endif %}
+        </p>
+        {% endif %}
+    {% endfor %}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

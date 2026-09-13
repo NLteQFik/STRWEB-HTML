@@ -1,0 +1,81 @@
+{% extends "hotel/base.html" %}
+{% block title %}Отзывы — Aurora Hotel{% endblock %}
+{% block content %}
+<section id="reviews" aria-labelledby="reviews-heading">
+    <h1 id="reviews-heading">Отзывы</h1>
+    <form method="get">
+        <fieldset>
+            <legend>Сортировка отзывов</legend>
+            <p>
+                <label for="review-sort">Сортировка:</label>
+                <select id="review-sort" name="sort">
+                    <option value="date_desc" {% if selected_sort == "date_desc" %}selected{% endif %}>Сначала новые</option>
+                    <option value="date_asc" {% if selected_sort == "date_asc" %}selected{% endif %}>Сначала старые</option>
+                    <option value="rating_desc" {% if selected_sort == "rating_desc" %}selected{% endif %}>Оценка: 5 → 1</option>
+                    <option value="rating_asc" {% if selected_sort == "rating_asc" %}selected{% endif %}>Оценка: 1 → 5</option>
+                </select>
+                <button type="submit">Применить</button>
+            </p>
+        </fieldset>
+    </form>
+
+    {% if form %}
+    <section id="add-review" aria-labelledby="add-review-heading">
+        <h2 id="add-review-heading">Добавить отзыв</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <p><strong>{{ error }}</strong></p>
+                {% endfor %}
+            {% endif %}
+            {% for field in form %}
+                <p>
+                    {{ field.label_tag }}<br>
+                    {{ field }}<br>
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    {% endif %}
+                </p>
+            {% endfor %}
+            <p><button type="submit" title="Отправить отзыв">Отправить</button></p>
+        </form>
+    </section>
+    <hr>
+    {% else %}
+    <section aria-labelledby="auth-required-heading">
+        <h2 id="auth-required-heading">Добавить отзыв</h2>
+        <p><em>Чтобы добавить отзыв, войдите в аккаунт или зарегистрируйтесь.</em></p>
+        <p><a href="{% url 'login' %}?next={% url 'review_list' %}">Войти</a> | <a href="{% url 'register' %}">Регистрация</a></p>
+    </section>
+    <hr>
+    {% endif %}
+
+    <ol start="1">
+        {% for row in review_rows %}
+            {% with review=row.review %}
+            <li>
+                <article id="review-{{ review.pk }}">
+                    <h2>{{ review.author_name }}</h2>
+                    <p>
+                        <strong>Оценка:</strong>
+                        <meter value="{{ review.rating }}" min="1" max="5" optimum="5" title="{{ review.rating }} из 5">{{ review.rating }}/5</meter>
+                    </p>
+                    <blockquote cite="#review-{{ review.pk }}">
+                        <p>{{ review.review_text|linebreaksbr }}</p>
+                    </blockquote>
+                    <p><strong>Дата:</strong> <time datetime="{{ review.created_at|date:'c' }}">UTC {{ row.created_times.utc }} | Локально {{ row.created_times.user }}</time></p>
+                    {% if user.is_superuser %}
+                        <p><a href="{% url 'review_delete' review.pk %}">Удалить</a></p>
+                    {% endif %}
+                </article>
+            </li>
+            {% endwith %}
+        {% empty %}
+            <li>Отзывов пока нет.</li>
+        {% endfor %}
+    </ol>
+</section>
+{% endblock %}

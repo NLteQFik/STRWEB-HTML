@@ -1,0 +1,17 @@
+{% extends "hotel/base.html" %}
+{% block title %}Категории номеров{% endblock %}
+{% block content %}
+<h1>Категории номеров</h1>
+<a href="{% url 'room_category_create' %}">Создать категорию</a>
+<ul>
+    {% for category in categories %}
+        <li>
+            {{ category.name }} ({{ category.capacity }} чел.) — {{ category.base_price }}
+            [<a href="{% url 'room_category_update' category.pk %}">Редактировать</a>]
+            [<a href="{% url 'room_category_delete' category.pk %}">Удалить</a>]
+        </li>
+    {% empty %}
+        <li>Категории отсутствуют.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

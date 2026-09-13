@@ -1,0 +1,25 @@
+{% extends "hotel/base.html" %}
+{% block title %}Редактировать информацию о компании{% endblock %}
+{% block content %}
+<h1>Редактировать информацию о компании</h1>
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+    {% for field in form %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}<br>
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <span>{{ error }}</span><br>
+                {% endfor %}
+            {% endif %}
+        </p>
+    {% endfor %}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

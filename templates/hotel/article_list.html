@@ -1,0 +1,48 @@
+{% extends "hotel/base.html" %}
+{% block title %}Новости{% endblock %}
+{% block content %}
+<section id="news" aria-labelledby="news-heading">
+    <h1 id="news-heading">Новости</h1>
+    {% if user.is_superuser %}
+        <p><a href="{% url 'article_create' %}">Добавить новость</a></p>
+    {% endif %}
+    <form method="get">
+        <fieldset>
+            <legend>Поиск новостей</legend>
+            <p>
+                <label for="news-q">Запрос:</label>
+                <input id="news-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Поиск по заголовку и тексту">
+                <button type="submit">Найти</button>
+            </p>
+        </fieldset>
+    </form>
+    {% for row in article_rows %}
+        {% with article=row.article times=row.times %}
+        <article id="news-{{ article.pk }}">
+            <h2>{{ article.title }}</h2>
+            <p><em>{{ article.short_content|truncatechars:180 }}</em></p>
+            <figure>
+                <picture>
+                    <source media="(min-width: 768px)" srcset="https://dummyimage.com/640x200/4682b4/fff&amp;text=News">
+                    <source media="(max-width: 767px)" srcset="https://dummyimage.com/320x200/4682b4/fff&amp;text=News">
+                    {% if article.image %}
+                        <img src="{{ article.image.url }}" alt="Изображение новости {{ article.title }}" width="640" loading="lazy">
+                    {% else %}
+                        <img src="https://dummyimage.com/200x120/4682b4/fff&amp;text=News" alt="Изображение новости {{ article.title }}" width="640" loading="lazy">
+                    {% endif %}
+                </picture>
+                <figcaption>{{ article.title }}</figcaption>
+            </figure>
+            <p><strong>Дата публикации:</strong> <time datetime="{{ article.created_at|date:'c' }}">UTC {{ times.utc }} | Локально: {{ times.user }}</time></p>
+            <p><a href="{% url 'article_detail' article.pk %}" title="Читать полную статью: {{ article.title }}">Читать далее →</a></p>
+            {% if user.is_superuser %}
+                <p><a href="{% url 'article_update' article.pk %}">Редактировать</a> | <a href="{% url 'article_delete' article.pk %}">Удалить</a></p>
+            {% endif %}
+            <hr>
+        </article>
+        {% endwith %}
+    {% empty %}
+        <p>Статей пока нет.</p>
+    {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "hotel/base.html" %}
+{% block title %}Платежи{% endblock %}
+{% block content %}
+<h1>Платежи</h1>
+<p><a href="{% url 'payment_create' %}">Добавить платёж</a></p>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>ID</th><th>Бронирование</th><th>Номер</th><th>Клиент</th><th>Сумма</th><th>Статус</th><th>Дата оплаты</th><th>Создано (UTC / локально)</th><th>Обновлено (UTC / локально)</th><th>Действия</th>
+    </tr>
+    {% for row in payment_rows %}
+        {% with payment=row.payment %}
+        <tr>
+            <td>{{ payment.pk }}</td>
+            <td>{{ payment.booking.pk }}</td>
+            <td>{{ payment.booking.room.room_number }}</td>
+            <td>{{ payment.booking.client.full_name }}</td>
+            <td>{{ payment.amount }}</td>
+            <td>{{ payment.get_status_display }}</td>
+            <td>{{ payment.paid_at|date:"d/m/Y H:i" }}</td>
+            <td>UTC {{ row.created_times.utc }} / {{ row.created_times.user }}</td>
+            <td>UTC {{ row.updated_times.utc }} / {{ row.updated_times.user }}</td>
+            <td>
+                <a href="{% url 'payment_update' payment.pk %}">Редактировать</a>
+                <a href="{% url 'payment_delete' payment.pk %}">Удалить</a>
+            </td>
+        </tr>
+        {% endwith %}
+    {% empty %}
+        <tr><td colspan="10">Платежи не найдены.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

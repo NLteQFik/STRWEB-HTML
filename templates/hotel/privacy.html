@@ -1,0 +1,35 @@
+{% extends "hotel/base.html" %}
+{% block title %}Политика конфиденциальности — Aurora Hotel{% endblock %}
+{% block meta_description %}Политика конфиденциальности Aurora Hotel: обработка и защита персональных данных гостей.{% endblock %}
+{% block content %}
+<article id="privacy-policy" aria-labelledby="privacy-heading">
+    <h1 id="privacy-heading">Политика конфиденциальности</h1>
+    <p>Настоящая политика конфиденциальности описывает порядок обработки и хранения персональных данных пользователей сайта <mark>Aurora Hotel</mark>.</p>
+    <section aria-labelledby="privacy-collect-heading">
+        <h2 id="privacy-collect-heading">1. Какие данные мы собираем</h2>
+        <ul>
+            <li>имя и фамилия;</li>
+            <li>контактный телефон;</li>
+            <li>адрес электронной почты;</li>
+            <li>данные бронирования и оплаты.</li>
+        </ul>
+    </section>
+    <section aria-labelledby="privacy-use-heading">
+        <h2 id="privacy-use-heading">2. Цели использования</h2>
+        <p>Персональные данные используются исключительно для обработки бронирований, обратной связи и улучшения качества обслуживания. Доступ к данным предоставляется только уполномоченным сотрудникам.</p>
+    </section>
+    <section aria-labelledby="privacy-security-heading">
+        <h2 id="privacy-security-heading">3. Защита данных</h2>
+        <p>Мы принимаем необходимые организационные и технические меры для защиты персональных данных от несанкционированного доступа, изменения, раскрытия или уничтожения.</p>
+    </section>
+    <section aria-labelledby="privacy-consent-heading">
+        <h2 id="privacy-consent-heading">4. Согласие пользователя</h2>
+        <p>Используя сайт, пользователь подтверждает согласие с условиями данной политики конфиденциальности.</p>
+        <p>Полный текст можно <a href="https://www.w3.org/" download="privacy_policy_aurora_hotel.txt" rel="noopener noreferrer">скачать в формате .txt</a>.</p>
+    </section>
+    <aside aria-label="Связанные документы">
+        <h2>Дополнительно</h2>
+        <p>См. также: <a href="{% url 'about' %}#about-certificate">сертификат компании</a>.</p>
+    </aside>
+</article>
+{% endblock %}

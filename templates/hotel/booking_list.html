@@ -1,0 +1,51 @@
+{% extends "hotel/base.html" %}
+{% block title %}Список бронирований{% endblock %}
+{% block content %}
+<h1>Бронирования</h1>
+{% if is_my %}
+    <p>Показаны только ваши бронирования.</p>
+{% else %}
+    <form method="get">
+        <select name="sort">
+            <option value="-created_at">Сначала новые</option>
+            <option value="created_at">Сначала старые</option>
+            <option value="-check_in_date">Заезд: новые</option>
+            <option value="check_in_date">Заезд: старые</option>
+        </select>
+        <button type="submit">Применить</button>
+    </form>
+{% endif %}
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>ID</th><th>Номер</th><th>Клиент</th><th>Заезд</th><th>Выезд</th><th>Статус</th><th>Создано (UTC / локально)</th><th>Обновлено (UTC / локально)</th><th>Действия</th>
+    </tr>
+    {% for row in booking_rows %}
+        {% with booking=row.booking %}
+        <tr>
+            <td>{{ booking.pk }}</td>
+            <td>{{ booking.room.room_number }}</td>
+            <td>{{ booking.client.full_name }}</td>
+            <td>{{ booking.check_in_date }}</td>
+            <td>{{ booking.check_out_date }}</td>
+            <td>{{ booking.get_status_display }}</td>
+            <td>UTC {{ row.created_times.utc }} / {{ row.created_times.user }}</td>
+            <td>UTC {{ row.updated_times.utc }} / {{ row.updated_times.user }}</td>
+            <td>
+                {% if is_my and booking.status == "active" %}
+                    <a href="{% url 'booking_cancel' booking.pk %}">Отменить</a>
+                {% endif %}
+                {% if not is_my %}
+                    <a href="{% url 'booking_update' booking.pk %}">Редактировать</a>
+                    {% if user.is_superuser %}
+                        | <a href="{% url 'booking_delete' booking.pk %}">Удалить</a>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        {% endwith %}
+    {% empty %}
+        <tr><td colspan="9">Бронирования не найдены.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

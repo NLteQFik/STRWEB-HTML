@@ -1,0 +1,132 @@
+{% extends "hotel/base.html" %}
+{% load static %}
+{% block title %}Сотрудники{% endblock %}
+{% block content %}
+<section id="contacts" aria-labelledby="contacts-heading">
+    <h1 id="contacts-heading">Контакты</h1>
+    <p>Свяжитесь с сотрудниками <strong>Aurora Hotel</strong> по телефону или электронной почте.</p>
+    <p>Официальный сайт партнёров: <a href="https://www.booking.com/" rel="noopener noreferrer" target="_blank" title="Внешняя ссылка">booking.com</a></p>
+    <form method="get">
+        <fieldset>
+            <legend>Поиск сотрудников</legend>
+            <p>
+                <label for="emp-q">ФИО:</label>
+                <input id="emp-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Поиск по ФИО">
+                <label for="emp-sort">Сортировка:</label>
+                <select id="emp-sort" name="sort">
+                    <option value="full_name">ФИО А-Я</option>
+                    <option value="-full_name">ФИО Я-А</option>
+                    <option value="position">Должность А-Я</option>
+                    <option value="-position">Должность Я-А</option>
+                </select>
+                <button type="submit">Применить</button>
+            </p>
+        </fieldset>
+    </form>
+    {% if user.is_superuser %}
+        <p><a href="{% url 'employee_create' %}">Добавить сотрудника</a></p>
+    {% endif %}
+    {% for employee in employees %}
+        <article id="contact-{{ employee.pk }}">
+            <h2>{{ employee.full_name }}</h2>
+            <p><strong>Должность:</strong> {{ employee.position }}</p>
+            <p><strong>Описание работ:</strong> {{ employee.work_description }}</p>
+            <p><strong>Телефон:</strong> <a href="tel:{{ employee.phone }}" title="Позвонить {{ employee.full_name }}">{{ employee.phone }}</a></p>
+            <p><strong>Email:</strong> <a href="mailto:{{ employee.user.email }}" title="Написать {{ employee.full_name }}">{{ employee.user.email }}</a></p>
+            <figure>
+                <picture>
+                    <source media="(min-width: 768px)" srcset="https://i.pravatar.cc/320?u=emp{{ employee.id }}">
+                    {% if employee.photo %}
+                        <img src="{{ employee.photo.url }}" alt="Фото сотрудника {{ employee.full_name }}" width="220" loading="lazy">
+                    {% else %}
+                        <img src="https://i.pravatar.cc/150?u=emp{{ employee.id }}" alt="Фото сотрудника {{ employee.full_name }}" width="220" loading="lazy">
+                    {% endif %}
+                </picture>
+                <figcaption>{{ employee.full_name }} — {{ employee.position }}</figcaption>
+            </figure>
+            {% if user.is_superuser %}
+                <p><a href="{% url 'employee_update' employee.pk %}">Редактировать</a> | <a href="{% url 'employee_delete' employee.pk %}">Удалить</a></p>
+            {% endif %}
+            <hr>
+        </article>
+    {% empty %}
+        <p>Сотрудники не найдены.</p>
+    {% endfor %}
+</section>
+
+<section id="feedback-form" aria-labelledby="feedback-form-heading">
+    <h2 id="feedback-form-heading">Форма обратной связи</h2>
+    <p>Демонстрация HTML-форм, элементов управления и клиентской валидации (демо без бэкенда).</p>
+    <form method="get" action="#feedback-form">
+        <input type="hidden" name="form_id" value="contact-demo">
+        <fieldset>
+            <legend>Контактные данные</legend>
+            <p>
+                <label for="contact-name">ФИО:</label>
+                <input id="contact-name" name="name" type="text" required minlength="3" maxlength="100" placeholder="Иванов Иван" autocomplete="name">
+            </p>
+            <p>
+                <label for="contact-email">Email:</label>
+                <input id="contact-email" name="email" type="email" required placeholder="guest@example.com" autocomplete="email">
+            </p>
+            <p>
+                <label for="contact-tel">Телефон:</label>
+                <input id="contact-tel" name="phone" type="tel" required pattern="^\+375 \((25|29|33|44)\) \d{3}-\d{2}-\d{2}$" placeholder="+375 (29) 123-45-67" title="Формат: +375 (29) 123-45-67" autocomplete="tel">
+            </p>
+            <p>
+                <label for="contact-url">Сайт компании:</label>
+                <input id="contact-url" name="website" type="url" placeholder="https://example.com">
+            </p>
+            <p>
+                <label for="contact-date">Дата заезда:</label>
+                <input id="contact-date" name="check_in" type="date" required>
+                <label for="contact-number">Гостей:</label>
+                <input id="contact-number" name="guests" type="number" min="1" max="6" value="2" required>
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>Тип обращения (radio)</legend>
+            <p><label><input type="radio" name="topic" value="booking" required> Бронирование</label></p>
+            <p><label><input type="radio" name="topic" value="service"> Сервис</label></p>
+            <p><label><input type="radio" name="topic" value="other"> Другое</label></p>
+        </fieldset>
+        <fieldset>
+            <legend>Дополнительные параметры</legend>
+            <p>
+                <label for="contact-search">Поиск по FAQ:</label>
+                <input id="contact-search" name="search" type="search" placeholder="Введите ключевое слово">
+            </p>
+            <p>
+                <label for="contact-range">Оценка сервиса (range):</label>
+                <input id="contact-range" name="rating" type="range" min="1" max="5" step="1" value="4">
+            </p>
+            <p>
+                <label for="contact-color">Цвет бренда (color):</label>
+                <input id="contact-color" name="brand_color" type="color" value="#1e3a5f">
+            </p>
+            <p>
+                <label for="contact-file">Прикрепить файл (file):</label>
+                <input id="contact-file" name="attachment" type="file" accept=".pdf,.doc,.docx,image/*">
+            </p>
+            <p>
+                <label for="contact-message">Сообщение:</label>
+                <textarea id="contact-message" name="message" rows="4" required minlength="10" maxlength="1000" placeholder="Ваш вопрос или пожелание"></textarea>
+            </p>
+            <p>
+                <label for="contact-department">Отдел:</label>
+                <select id="contact-department" name="department" required>
+                    <option value="">— выберите отдел —</option>
+                    <option value="reception">Ресепшен</option>
+                    <option value="booking">Бронирование</option>
+                    <option value="support">Служба поддержки</option>
+                </select>
+            </p>
+            <p><label><input type="checkbox" name="agree" value="1" required> Согласен с политикой конфиденциальности</label></p>
+        </fieldset>
+        <p>
+            <button type="submit" title="Отправить форму">Отправить</button>
+            <button type="reset" title="Сбросить все поля">Сбросить</button>
+        </p>
+    </form>
+</section>
+{% endblock %}

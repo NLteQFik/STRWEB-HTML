@@ -1,0 +1,21 @@
+{% extends "hotel/base.html" %}
+{% block title %}Дополнительные услуги{% endblock %}
+{% block content %}
+<h1>Дополнительные услуги</h1>
+{% if user.is_superuser %}
+    <p><a href="{% url 'extra_service_create' %}">Добавить услугу</a></p>
+{% endif %}
+<ul>
+    {% for service in services %}
+        <li>
+            <strong>{{ service.name }}</strong> — {{ service.price }} BYN
+            {% if user.is_superuser %}
+                | <a href="{% url 'extra_service_update' service.pk %}">Редактировать</a>
+                | <a href="{% url 'extra_service_delete' service.pk %}">Удалить</a>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>Услуги пока не добавлены.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

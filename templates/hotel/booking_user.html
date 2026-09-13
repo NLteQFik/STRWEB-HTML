@@ -1,0 +1,49 @@
+{% extends "hotel/base.html" %}
+{% block title %}Мои бронирования{% endblock %}
+{% block content %}
+<h1>Мои бронирования</h1>
+
+{% if user.is_authenticated and form is not None %}
+    <h2>Создать бронирование</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <p>
+                {{ field.label_tag }}<br>
+                {{ field }}<br>
+                {{ field.errors }}
+            </p>
+        {% endfor %}
+        <button type="submit">Забронировать</button>
+    </form>
+{% elif not user.is_authenticated %}
+    <p>Чтобы создавать бронирования, <a href="{% url 'register' %}">зарегистрируйтесь</a> или <a href="{% url 'login' %}">войдите</a>.</p>
+{% endif %}
+
+<h2>Мои бронирования</h2>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Номер</th><th>Заезд</th><th>Выезд</th><th>Стоимость</th><th>Статус</th><th>Создано</th><th>Действия</th>
+    </tr>
+    {% for row in booking_rows %}
+        {% with booking=row.booking %}
+        <tr>
+            <td>{{ booking.room.room_number }}</td>
+            <td>{{ booking.check_in_date|date:"d/m/Y" }}</td>
+            <td>{{ booking.check_out_date|date:"d/m/Y" }}</td>
+            <td>{{ booking.total_cost }}</td>
+            <td>{{ booking.get_status_display }}</td>
+            <td>{{ row.created_times.user }}</td>
+            <td>
+                {% if booking.status == "active" %}
+                    <a href="{% url 'booking_cancel' booking.pk %}">Отменить</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endwith %}
+    {% empty %}
+        <tr><td colspan="7">У вас пока нет бронирований.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

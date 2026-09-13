@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" fill="#e5e7eb"/>
+  <circle cx="128" cy="96" r="48" fill="#9ca3af"/>
+  <path d="M32 224c12-52 52-80 96-80s84 28 96 80" fill="#9ca3af"/>
+  <text x="128" y="248" font-size="14" text-anchor="middle" fill="#374151">
+    avatar placeholder
+  </text>
+</svg>

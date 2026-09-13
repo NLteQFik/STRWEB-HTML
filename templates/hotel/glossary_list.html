@@ -1,0 +1,44 @@
+{% extends "hotel/base.html" %}
+{% block title %}Словарь терминов{% endblock %}
+{% block content %}
+<section id="glossary" aria-labelledby="glossary-heading">
+    <h1 id="glossary-heading">Словарь терминов и понятий</h1>
+    <p>Часто задаваемые вопросы об отеле. Нажмите на вопрос, чтобы увидеть ответ.</p>
+    {% if user.is_superuser %}
+        <p><a href="{% url 'glossary_create' %}">Добавить термин</a></p>
+    {% endif %}
+    <form method="get">
+        <fieldset>
+            <legend>Поиск и сортировка</legend>
+            <p>
+                <label for="glossary-q">Вопрос:</label>
+                <input id="glossary-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Поиск по вопросу">
+                <label for="glossary-sort">Сортировка:</label>
+                <select id="glossary-sort" name="sort">
+                    <option value="question">Вопрос А-Я</option>
+                    <option value="-question">Вопрос Я-А</option>
+                    <option value="-created_at">Сначала новые</option>
+                    <option value="created_at">Сначала старые</option>
+                </select>
+                <button type="submit">Применить</button>
+            </p>
+        </fieldset>
+    </form>
+    {% for item in items %}
+        <article id="faq-{{ item.pk }}">
+            <details>
+                <summary>
+                    <strong>{{ item.question }}</strong>
+                    — добавлено <time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:"d/m/Y" }}</time>
+                </summary>
+                <p>{{ item.answer|linebreaksbr }}</p>
+                {% if user.is_superuser %}
+                    <p><a href="{% url 'glossary_update' item.pk %}">Редактировать</a> | <a href="{% url 'glossary_delete' item.pk %}">Удалить</a></p>
+                {% endif %}
+            </details>
+        </article>
+    {% empty %}
+        <p>Термины не найдены.</p>
+    {% endfor %}
+</section>
+{% endblock %}

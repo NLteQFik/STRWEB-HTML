@@ -1,0 +1,44 @@
+{% extends "hotel/base.html" %}
+{% block title %}Номер {{ room.room_number }}{% endblock %}
+{% block content %}
+<article id="room-{{ room.room_number }}">
+    <header>
+        <p><a href="{% url 'room_list' %}">← Вернуться к каталогу</a></p>
+        <h1>Номер {{ room.room_number }} — {{ room.category.name }}</h1>
+        <p><strong>Категория:</strong> {{ room.category.name }}</p>
+        <p>{{ room.category.description }}</p>
+    </header>
+
+    <section aria-labelledby="room-price-heading">
+        <h2 id="room-price-heading">Стоимость и характеристики</h2>
+        <p><strong>Цена:</strong> {{ room.category.base_price }} BYN / ночь</p>
+        <p><strong>Вместимость:</strong> {{ room.category.capacity }} чел.</p>
+        <p><strong>Статус:</strong> {% if room.status == "free" %}доступен{% else %}{{ room.get_status_display }}{% endif %}</p>
+    </section>
+
+    <figure>
+        {% if room.photo %}
+            <img src="{{ room.photo.url }}" alt="Фото номера {{ room.room_number }}" width="640" height="400" loading="lazy">
+        {% else %}
+            <img src="https://dummyimage.com/600x400/4682b4/fff&amp;text=Room+{{ room.room_number }}" alt="Фото номера {{ room.room_number }}" width="640" height="400" loading="lazy">
+        {% endif %}
+        <figcaption>Номер {{ room.room_number }}, категория «{{ room.category.name }}»</figcaption>
+    </figure>
+
+    <section aria-labelledby="room-actions-heading">
+        <h2 id="room-actions-heading">Действия</h2>
+        <form method="post" action="{% url 'booking_create' %}">
+            {% csrf_token %}
+            <input type="hidden" name="room" value="{{ room.pk }}">
+            <p>
+                <label for="quantity">Количество ночей:</label>
+                <input id="quantity" name="quantity" type="number" min="1" max="30" value="1" required>
+            </p>
+            <p>
+                <button type="submit" title="Добавить номер {{ room.room_number }} в корзину" aria-label="Добавить номер {{ room.room_number }} в корзину">Добавить в корзину</button>
+            </p>
+        </form>
+        <p><a href="{% url 'booking_create' %}">Или оформить бронирование с датами</a> | <a href="{% url 'booking_user' %}" title="Перейти в корзину">Перейти в корзину</a></p>
+    </section>
+</article>
+{% endblock %}

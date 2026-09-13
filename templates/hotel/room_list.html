@@ -1,0 +1,70 @@
+{% extends "hotel/base.html" %}
+{% block title %}Управление номерами{% endblock %}
+{% block content %}
+<h1>Номера — каталог</h1>
+<p><a href="{% url 'room_create' %}">Создать номер</a> | <a href="#cart-demo-rooms">Якорь: корзина</a></p>
+<form method="get">
+    <fieldset>
+        <legend>Фильтр номеров</legend>
+        <p>
+            <label for="room-q">Номер:</label>
+            <input id="room-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Номер или описание категории">
+            <label for="room-status">Статус:</label>
+            <select id="room-status" name="status">
+                <option value="">Все статусы</option>
+                <option value="free">Свободен</option>
+                <option value="occupied">Занят</option>
+                <option value="cleaning">На уборке</option>
+            </select>
+            <label for="room-sort">Сортировка:</label>
+            <select id="room-sort" name="sort">
+                <option value="category__base_price">Цена категории ↑</option>
+                <option value="-category__base_price">Цена категории ↓</option>
+            </select>
+            <button type="submit">Применить</button>
+        </p>
+    </fieldset>
+</form>
+
+<table border="1" cellpadding="6" cellspacing="0">
+    <caption>Каталог номеров Aurora Hotel</caption>
+    <thead>
+        <tr>
+            <th id="rc-photo" scope="col">Фото</th>
+            <th id="rc-number" scope="col">Номер</th>
+            <th id="rc-status" scope="col">Статус</th>
+            <th id="rc-cat" scope="col">Категория</th>
+            <th id="rc-price" scope="col">Цена категории</th>
+            <th id="rc-actions" scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for room in rooms %}
+        <tr>
+            <td headers="rc-photo">
+                {% if room.photo %}
+                    <img src="{{ room.photo.url }}" alt="Фото номера {{ room.room_number }}" width="48" height="48" loading="lazy">
+                {% else %}
+                    <img src="https://dummyimage.com/200x150/4682b4/fff&amp;text=Room+{{ room.room_number }}" alt="Фото номера {{ room.room_number }}" width="48" height="48" loading="lazy">
+                {% endif %}
+            </td>
+            <th headers="rc-number" scope="row">{{ room.room_number }}</th>
+            <td headers="rc-status">{{ room.get_status_display }}</td>
+            <td headers="rc-cat">{{ room.category.name }}</td>
+            <td headers="rc-price">{{ room.category.base_price }}</td>
+            <td headers="rc-actions">
+                <a href="{% url 'room_detail' room.pk %}" title="Подробнее о номере {{ room.room_number }}">Детали</a> |
+                <a href="{% url 'room_update' room.pk %}">Редактировать</a> |
+                <a href="{% url 'room_delete' room.pk %}">Удалить</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6">Номера не найдены.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+<section id="cart-demo-rooms" aria-label="Корзина">
+    <h2>Корзина</h2>
+    <p>Демо-шаблоны: <samp>hotel/cart.html</samp> (список, +/−, удалить, оплатить) и <samp>hotel/cart_payment.html</samp> (таблица + форма оплаты). Живой аналог — <a href="{% url 'booking_user' %}">бронирования</a>.</p>
+</section>
+{% endblock %}

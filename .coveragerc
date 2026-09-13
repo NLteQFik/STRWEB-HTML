@@ -1,0 +1,4 @@
+[run]
+omit =
+    hotel/management/*
+    hotel/tests.py

@@ -1,0 +1,199 @@
+{% extends "hotel/base.html" %}
+{% block title %}О компании — Aurora Hotel{% endblock %}
+{% block meta_description %}Информация об Aurora Hotel: история, реквизиты, сертификат, видео-презентация.{% endblock %}
+{% block content %}
+{% if company_info %}
+<article itemscope itemtype="https://schema.org/Organization">
+    <header id="about-header">
+        <p><a href="{% url 'home' %}">← На главную</a></p>
+        <h1 itemprop="name">Aurora Hotel</h1>
+        <figure id="about-logo">
+            <img src="https://dummyimage.com/160x160/1e3a5f/fff&amp;text=Aurora" alt="Логотип Aurora Hotel" width="160" height="160" itemprop="logo" loading="eager">
+            <figcaption>Официальный логотип компании</figcaption>
+        </figure>
+        <p itemprop="description">
+            {{ company_info.company_text|linebreaksbr }}
+            Мы работаем по стандартам <abbr title="HyperText Markup Language">HTML</abbr>
+            и <abbr title="World Wide Web Consortium">W3C</abbr> для доступности контента.
+            Цены указаны с <del datetime="2026-01-01">120 BYN</del> <ins datetime="2026-06-01">от 100 BYN</ins> за ночь.
+            Формула: H<sub>2</sub>O в SPA-зоне, этаж 10<sup>2</sup> = 100 номеров.
+        </p>
+    </header>
+
+    <nav aria-label="Навигация по странице о компании">
+        <ul>
+            <li><a href="#about-video">Видео</a></li>
+            <li><a href="#about-history">История</a></li>
+            <li><a href="#about-requisites">Реквизиты</a></li>
+            <li><a href="#about-certificate">Сертификат</a></li>
+            <li><a href="#about-map">Карта</a></li>
+            <li><a href="#about-html-demo">HTML-элементы</a></li>
+        </ul>
+    </nav>
+
+    <section id="about-video" aria-labelledby="about-video-heading">
+        <h2 id="about-video-heading">Видео о компании</h2>
+        <video controls width="640" height="360" preload="metadata" title="Видео-презентация Aurora Hotel">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Ваш браузер не поддерживает элемент <code>video</code>.
+        </video>
+        <p>Аудио-приветствие для гостей:</p>
+        <audio controls preload="none" title="Аудио-приветствие Aurora Hotel">
+            <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+            Ваш браузер не поддерживает элемент <code>audio</code>.
+        </audio>
+    </section>
+
+    <section id="about-history" aria-labelledby="about-history-heading">
+        <h2 id="about-history-heading">История по годам</h2>
+        <p>{{ company_info.history_by_years|linebreaksbr }}</p>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <caption>Хронология развития Aurora Hotel</caption>
+            <thead>
+                <tr>
+                    <th id="hist-period" colspan="2" scope="colgroup">Период</th>
+                    <th id="hist-event" scope="col">Событие</th>
+                </tr>
+                <tr>
+                    <th id="hist-from" scope="col" headers="hist-period">С</th>
+                    <th id="hist-to" scope="col" headers="hist-period">По</th>
+                    <th id="hist-desc" scope="col" headers="hist-event">Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td headers="hist-from hist-period">2010</td>
+                    <td headers="hist-to hist-period">2014</td>
+                    <td headers="hist-desc hist-event">Открытие первого корпуса на 60 номеров</td>
+                </tr>
+                <tr>
+                    <td headers="hist-from hist-period">2015</td>
+                    <td headers="hist-to hist-period">2020</td>
+                    <td headers="hist-desc hist-event">Расширение до 120 номеров, запуск SPA</td>
+                </tr>
+                <tr>
+                    <td headers="hist-from hist-period">2021</td>
+                    <td headers="hist-to hist-period">2026</td>
+                    <td headers="hist-desc hist-event">Цифровизация бронирования и программа лояльности</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table border="1" cellpadding="8" cellspacing="0">
+            <caption>Сводная таблица показателей</caption>
+            <thead>
+                <tr>
+                    <th id="stat-group" scope="col">Группа</th>
+                    <th id="stat-metric" scope="col">Показатель</th>
+                    <th id="stat-2024" scope="col">2024</th>
+                    <th id="stat-2025" scope="col">2025</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th id="stat-rooms-group" scope="row" rowspan="2" headers="stat-group">Номера</th>
+                    <th id="stat-rooms-count" scope="row" headers="stat-metric stat-rooms-group">Количество</th>
+                    <td headers="stat-2024 stat-rooms-count">120</td>
+                    <td headers="stat-2025 stat-rooms-count">135</td>
+                </tr>
+                <tr>
+                    <th id="stat-rooms-occ" scope="row" headers="stat-metric stat-rooms-group">Загрузка, %</th>
+                    <td headers="stat-2024 stat-rooms-occ">78</td>
+                    <td headers="stat-2025 stat-rooms-occ">82</td>
+                </tr>
+                <tr>
+                    <th id="stat-service-group" scope="row" headers="stat-group" colspan="2">Средний рейтинг сервиса</th>
+                    <td headers="stat-2024 stat-service-group">4.6</td>
+                    <td headers="stat-2025 stat-service-group">4.8</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <blockquote cite="https://www.w3.org/">
+            <p>«Веб для всех» — принцип доступности и открытости информации.</p>
+        </blockquote>
+        <p>— <cite>World Wide Web Consortium (W3C)</cite></p>
+
+        <h3>Девиз компании (потенциальный перенос)</h3>
+        <p><wbr>Гостиничный<wbr> дом<wbr> уютный,<wbr> сервис<wbr> здесь<wbr> всегда<wbr> на<wbr> уровне.</p>
+
+        <h3>Девиз компании (фиксированный перенос)</h3>
+        <p lang="ru">
+            Гостиничный дом уютный,<br>
+            Сервис здесь всегда на уровне,<br>
+            Aurora Hotel — путь к отдыху,<br>
+            Комфорт и стиль в каждой&nbsp;ночи.
+        </p>
+
+        <h3>Порядок заселения</h3>
+        <ol>
+            <li>Предъявите документ на ресепшене.</li>
+            <li>Получите ключ-карту номера.</li>
+            <li>Ознакомьтесь с правилами проживания.</li>
+            <li>Подпишите регистрационную карту.</li>
+        </ol>
+
+        <h3 id="about-html-demo">Пример HTML-кода</h3>
+        <pre><code>&lt;section id="about-video"&gt;
+  &lt;video controls width="640" height="360"&gt;
+    &lt;source src="promo.mp4" type="video/mp4"&gt;
+  &lt;/video&gt;
+&lt;/section&gt;</code></pre>
+    </section>
+
+    <section id="about-requisites" aria-labelledby="about-requisites-heading">
+        <h2 id="about-requisites-heading">Реквизиты</h2>
+        <dl>
+            <dt>Наименование</dt>
+            <dd>ООО «Aurora Hotel»</dd>
+            <dt><abbr title="Unified Business Identification Number">УНП</abbr></dt>
+            <dd>123456789</dd>
+            <dt>Юридический адрес</dt>
+            <dd>г. Минск, пр-т Победителей, 1</dd>
+            <dt>Расчётный счёт</dt>
+            <dd>BY00 BPSB 0000 0000 0000 0000</dd>
+        </dl>
+        <details>
+            <summary>Полный текст реквизитов</summary>
+            <p>{{ company_info.company_details|linebreaksbr }}</p>
+        </details>
+    </section>
+
+    <section id="about-certificate" aria-labelledby="about-certificate-heading">
+        <h2 id="about-certificate-heading">Сертификат</h2>
+        <pre id="certificate-text">СЕРТИФИКАТ СООТВЕТСТВИЯ № BY/112 04.08.002 01234
+Выдан: ООО «Aurora Hotel»
+Стандарт: СТБ ISO 9001-2015 «Системы менеджмента качества»
+Срок действия: с 01.06.2024 по 01.06.2027
+Орган по сертификации: БелГИСС, г. Минск</pre>
+        <p>
+            <a href="https://www.w3.org/" download="certificate_info.txt" rel="noopener noreferrer">
+                Скачать документ с реквизитами (.txt)
+            </a>
+        </p>
+    </section>
+
+    <section id="about-map" aria-labelledby="about-map-heading">
+        <h2 id="about-map-heading">Мы на карте</h2>
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=27.53%2C53.88%2C27.61%2C53.92&amp;layer=mapnik&amp;marker=53.9%2C27.5667" width="640" height="360" title="Карта расположения Aurora Hotel в Минске" loading="lazy"></iframe>
+    </section>
+
+    <section aria-labelledby="about-meta-heading">
+        <h2 id="about-meta-heading">Служебная информация</h2>
+        <p><strong>Дата добавления:</strong> <time datetime="{{ company_info.created_at|date:'c' }}">{{ company_info.created_at|date:"d/m/Y" }}</time></p>
+        <p><strong>Дата изменения:</strong> <time datetime="{{ company_info.updated_at|date:'c' }}">{{ company_info.updated_at|date:"d/m/Y" }}</time></p>
+    </section>
+</article>
+{% else %}
+<article>
+    <h1>О компании</h1>
+    <p>Информация о компании пока не добавлена.</p>
+</article>
+{% endif %}
+{% if user.is_superuser %}
+    <p>
+        <a href="{% url 'company_info_update' %}">Редактировать</a> |
+        <a href="{% url 'company_info_delete' %}">Удалить</a>
+    </p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "hotel/base.html" %}
+{% block title %}Панель аналитики{% endblock %}
+{% block content %}
+<h1>Панель аналитики отеля</h1>
+
+<section>
+    <h3>Дата и часовой пояс</h3>
+    <p><strong>Ваш пояс:</strong> {{ user_timezone_name }}</p>
+    <p><strong>Сейчас:</strong> {{ user_now|date:"d/m/Y H:i" }} ({{ weekday_name }})</p>
+    <p><strong>UTC:</strong> {{ current_date_utc }}</p>
+    <p><strong>Локальное время:</strong> {{ current_datetime_user }}</p>
+    <form method="get" action="{% url 'set_timezone' %}">
+        <select name="tz">
+            <option value="Europe/Minsk">Минск</option>
+            <option value="Europe/Moscow">Москва</option>
+            <option value="Europe/London">Лондон</option>
+            <option value="America/New_York">Нью-Йорк</option>
+            <option value="Asia/Tokyo">Токио</option>
+        </select>
+        <button type="submit">Сменить пояс</button>
+    </form>
+    <h4>Календарь</h4>
+    <pre>{{ text_calendar }}</pre>
+</section>
+<hr>
+
+<h2>Ключевые метрики</h2>
+<ul>
+    <li>Общая выручка: {{ total_revenue }}</li>
+    <li>Средний чек: {{ average_check }}</li>
+    <li>Мода чеков: {{ mode_check }}</li>
+    <li>Медиана чеков: {{ median_check }}</li>
+    <li>Средний возраст клиентов: {{ average_age }}</li>
+    <li>Медиана возраста клиентов: {{ median_age }}</li>
+    <li>Популярная категория: {{ popular_category_name }}</li>
+    <li>Самая прибыльная категория: {{ profitable_category_name }}</li>
+</ul>
+
+<h2>График бронирований</h2>
+<img src="data:image/png;base64,{{ chart_base64 }}" alt="График бронирований по датам">
+
+<h2>Выручка по клиентам</h2>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>ФИО</th>
+        <th>Сумма бронирований</th>
+    </tr>
+    {% for row in revenue_by_clients %}
+        <tr>
+            <td>{{ row.full_name }}</td>
+            <td>{{ row.total_sum|default:0 }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="2">Нет данных.</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Все бронирования</h2>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Номер</th>
+        <th>Клиент</th>
+        <th>Заезд</th>
+        <th>Выезд</th>
+        <th>Цена</th>
+        <th>Создано (UTC / локально)</th>
+        <th>Обновлено (UTC / локально)</th>
+    </tr>
+    {% for row in booking_rows %}
+        {% with booking=row.booking %}
+        <tr>
+            <td>{{ booking.room.room_number }}</td>
+            <td>{{ booking.client.full_name }}</td>
+            <td>{{ booking.check_in_date|date:"d/m/Y" }}</td>
+            <td>{{ booking.check_out_date|date:"d/m/Y" }}</td>
+            <td>{{ booking.total_cost }}</td>
+            <td>UTC {{ row.created_times.utc }} / Локально {{ row.created_times.user }}</td>
+            <td>UTC {{ row.updated_times.utc }} / Локально {{ row.updated_times.user }}</td>
+        </tr>
+        {% endwith %}
+    {% empty %}
+        <tr><td colspan="7">Нет данных.</td></tr>
+    {% endfor %}
+</table>
+
+<h2>База клиентов</h2>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>ФИО</th>
+        <th>Телефон</th>
+        <th>Дата рождения</th>
+        <th>Количество детей</th>
+    </tr>
+    {% for client in clients %}
+        <tr>
+            <td>{{ client.full_name }}</td>
+            <td>{{ client.phone }}</td>
+            <td>{{ client.birth_date|date:"d/m/Y" }}</td>
+            <td>{{ client.children_count }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="4">Клиенты отсутствуют.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "hotel/base.html" %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<article id="news-{{ article.pk }}">
+    <header>
+        <p><a href="{% url 'article_list' %}">← Вернуться к списку новостей</a></p>
+        <h1>{{ article.title }}</h1>
+        <p><strong>Создано (UTC):</strong> <time datetime="{{ article.created_at|date:'c' }}">{{ article_created_times.utc }}</time> | <strong>Локально:</strong> <time datetime="{{ article.created_at|date:'c' }}">{{ article_created_times.user }}</time></p>
+        <p><strong>Обновлено (UTC):</strong> <time datetime="{{ article.updated_at|date:'c' }}">{{ article_updated_times.utc }}</time> | <strong>Локально:</strong> {{ article_updated_times.user }}</p>
+    </header>
+    <figure>
+        {% if article.image %}
+            <img src="{{ article.image.url }}" alt="Изображение новости {{ article.title }}" width="640" loading="lazy">
+        {% else %}
+            <img src="https://dummyimage.com/800x400/4682b4/fff&amp;text=News" alt="Изображение новости {{ article.title }}" width="640" loading="lazy">
+        {% endif %}
+        <figcaption>{{ article.title }}</figcaption>
+    </figure>
+    <section aria-label="Текст статьи">
+        <p>{{ article.full_text|linebreaksbr }}</p>
+    </section>
+    <footer>
+        <p><a href="{% url 'article_list' %}">Назад к новостям</a></p>
+    </footer>
+</article>
+{% endblock %}

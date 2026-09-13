@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: hotel_db
+      POSTGRES_USER: hotel_user
+      POSTGRES_PASSWORD: hotel_password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hotel_user -d hotel_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_DEBUG: "1"
+      DJANGO_SECRET_KEY: "dev-secret-key"
+      DJANGO_ALLOWED_HOSTS: "127.0.0.1,localhost"
+      DATABASE_URL: "postgres://hotel_user:hotel_password@db:5432/hotel_db?sslmode=disable"
+      DJANGO_LOG_LEVEL: "INFO"
+    ports:
+      - "8000:8000"
+    volumes:
+      - media_data:/app/media
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  media_data:
