@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 
 from .models import (
     Article,
+    Banner,
     Booking,
     Client,
     CompanyInfo,
     Employee,
     ExtraService,
     Glossary,
+    Partner,
     Payment,
     PromoCode,
     Review,
@@ -154,3 +156,17 @@ class PromoCodeAdmin(admin.ModelAdmin):
     list_display = ("code", "discount_percent", "status", "created_at", "updated_at")
     search_fields = ("code",)
     list_filter = ("status",)
+
+
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ("title", "sort_order", "is_active", "created_at")
+    list_editable = ("sort_order", "is_active")
+    search_fields = ("title",)
+
+
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ("name", "website_url", "sort_order", "is_active", "created_at")
+    list_editable = ("sort_order", "is_active")
+    search_fields = ("name",)

@@ -410,6 +410,19 @@ class PaymentForm(forms.ModelForm):
         }
 
 
+class CartPaymentForm(forms.Form):
+    cardholder = forms.CharField(required=True, min_length=3, max_length=100)
+    card = forms.RegexField(required=True, regex=r"^\d{4} \d{4} \d{4} \d{4}$")
+    exp = forms.CharField(required=True, widget=forms.TextInput(attrs={"type": "month"}))
+    cvc = forms.RegexField(required=True, regex=r"^\d{3,4}$")
+    email = forms.EmailField(required=True)
+    method = forms.ChoiceField(
+        required=True,
+        choices=[("card", "Банковская карта"), ("erip", "ЕРИП"), ("cash", "Наличные на ресепшене")],
+    )
+    agree = forms.BooleanField(required=True)
+
+
 class RoomForm(forms.ModelForm):
     class Meta:
         model = Room

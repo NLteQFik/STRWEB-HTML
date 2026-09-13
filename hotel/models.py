@@ -476,3 +476,36 @@ class PromoCode(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.code
+
+
+class Banner(TimeStampedModel):
+    title = models.CharField("Заголовок", max_length=255)
+    image_url = models.URLField("Ссылка на изображение")
+    link_url = models.URLField("Ссылка баннера", blank=True)
+    alt_text = models.CharField("Текст для alt", max_length=255, blank=True)
+    sort_order = models.PositiveSmallIntegerField("Порядок", default=0)
+    is_active = models.BooleanField("Активен", default=True)
+
+    class Meta:
+        verbose_name = "Рекламный баннер"
+        verbose_name_plural = "Рекламные баннеры"
+        ordering = ["sort_order", "id"]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Partner(TimeStampedModel):
+    name = models.CharField("Название компании", max_length=255)
+    logo_url = models.URLField("Ссылка на логотип")
+    website_url = models.URLField("Сайт компании")
+    sort_order = models.PositiveSmallIntegerField("Порядок", default=0)
+    is_active = models.BooleanField("Активен", default=True)
+
+    class Meta:
+        verbose_name = "Партнёр"
+        verbose_name_plural = "Партнёры"
+        ordering = ["sort_order", "id"]
+
+    def __str__(self) -> str:
+        return self.name

@@ -9,12 +9,14 @@ from django.utils import timezone
 
 from hotel.models import (
     Article,
+    Banner,
     Booking,
     Client,
     CompanyInfo,
     Employee,
     ExtraService,
     Glossary,
+    Partner,
     Payment,
     PromoCode,
     Review,
@@ -56,6 +58,8 @@ class Command(BaseCommand):
 
         self._create_bookings_and_payments(rooms=rooms, clients=clients, services=services)
         self._create_articles()
+        self._create_banners()
+        self._create_partners()
         self._create_company_info()
         self._create_glossary()
         self._create_vacancies()
@@ -85,6 +89,8 @@ class Command(BaseCommand):
         Vacancy.objects.all().delete()
         Review.objects.all().delete()
         PromoCode.objects.all().delete()
+        Banner.objects.all().delete()
+        Partner.objects.all().delete()
         User.objects.filter(is_superuser=False).delete()
 
     def _create_categories(self):
@@ -371,6 +377,22 @@ class Command(BaseCommand):
                 ),
             ]
         )
+
+    def _create_banners(self):
+        Banner.objects.all().delete()
+        Banner.objects.bulk_create([
+            Banner(title="Раннее бронирование −15%", image_url="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=960&h=320&fit=crop", link_url="/rooms/", alt_text="Баннер: люкс со скидкой", sort_order=1, is_active=True),
+            Banner(title="SPA и завтраки в подарок", image_url="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=960&h=320&fit=crop", link_url="/extra-services/", alt_text="Баннер: SPA и завтраки", sort_order=2, is_active=True),
+            Banner(title="Семейные номера", image_url="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=960&h=320&fit=crop", link_url="", alt_text="Баннер: семейные номера", sort_order=3, is_active=True),
+        ])
+
+    def _create_partners(self):
+        Partner.objects.all().delete()
+        Partner.objects.bulk_create([
+            Partner(name="Booking.com", logo_url="https://dummyimage.com/160x80/003580/fff&text=Booking", website_url="https://www.booking.com/", sort_order=1, is_active=True),
+            Partner(name="Tripadvisor", logo_url="https://dummyimage.com/160x80/00aa6c/fff&text=TripAd", website_url="https://www.tripadvisor.com/", sort_order=2, is_active=True),
+            Partner(name="Airbnb", logo_url="https://dummyimage.com/160x80/ff5a5f/fff&text=Airbnb", website_url="https://www.airbnb.com/", sort_order=3, is_active=True),
+        ])
 
     def _create_company_info(self):
         CompanyInfo.objects.create(

@@ -74,6 +74,14 @@ from .booking import (
     booking_user_view,
     booking_cancel_view,
 )
+from .cart import (
+    cart_view,
+    cart_add_view,
+    cart_remove_view,
+    cart_increase_view,
+    cart_decrease_view,
+    cart_payment_view,
+)
 from .api import (
     weather_api_proxy,
     CurrencyApiProxyView,

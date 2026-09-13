@@ -47,12 +47,12 @@
                 | <a href="{% url 'booking_list' %}">Брони</a>
                 | <a href="{% url 'client_list' %}">Клиенты</a>
             {% endif %}
-            | <a href="{% url 'booking_user' %}" title="Корзина заказа (бронирования)">Корзина</a>
+            | <a href="{% url 'cart_view' %}" title="Корзина заказа (бронирования)">Корзина</a>
             | <a href="{% url 'booking_user' %}">Бронирования</a>
             | <a href="{% url 'client_cabinet' %}">Кабинет</a>
             | <a href="{% url 'logout' %}">Выйти</a>
         {% else %}
-            | <a href="{% url 'booking_user' %}" title="Корзина заказа">Корзина</a>
+            | <a href="{% url 'cart_view' %}" title="Корзина заказа">Корзина</a>
             | <a href="{% url 'login' %}">Войти</a>
             | <a href="{% url 'register' %}">Регистрация</a>
         {% endif %}

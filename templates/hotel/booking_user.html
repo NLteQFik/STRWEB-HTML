@@ -22,20 +22,31 @@
 {% endif %}
 
 <h2>Мои бронирования</h2>
-<table border="1" cellpadding="6">
-    <tr>
-        <th>Номер</th><th>Заезд</th><th>Выезд</th><th>Стоимость</th><th>Статус</th><th>Создано</th><th>Действия</th>
-    </tr>
+<p><a href="{% url 'cart_view' %}" title="Открыть корзину">Корзина</a> | <a href="{% url 'cart_payment' %}" title="Оплатить корзину">Оплатить корзину</a></p>
+<table border="1" cellpadding="6" cellspacing="0">
+    <caption>Мои бронирования Aurora Hotel</caption>
+    <thead>
+        <tr>
+            <th id="bk-room" scope="col">Номер</th>
+            <th id="bk-in" scope="col">Заезд</th>
+            <th id="bk-out" scope="col">Выезд</th>
+            <th id="bk-cost" scope="col">Стоимость</th>
+            <th id="bk-status" scope="col">Статус</th>
+            <th id="bk-created" scope="col">Создано</th>
+            <th id="bk-actions" scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for row in booking_rows %}
         {% with booking=row.booking %}
         <tr>
-            <td>{{ booking.room.room_number }}</td>
-            <td>{{ booking.check_in_date|date:"d/m/Y" }}</td>
-            <td>{{ booking.check_out_date|date:"d/m/Y" }}</td>
-            <td>{{ booking.total_cost }}</td>
-            <td>{{ booking.get_status_display }}</td>
-            <td>{{ row.created_times.user }}</td>
-            <td>
+            <th headers="bk-room" scope="row">{{ booking.room.room_number }}</th>
+            <td headers="bk-in">{{ booking.check_in_date|date:"d/m/Y" }}</td>
+            <td headers="bk-out">{{ booking.check_out_date|date:"d/m/Y" }}</td>
+            <td headers="bk-cost">{{ booking.total_cost }}</td>
+            <td headers="bk-status">{{ booking.get_status_display }}</td>
+            <td headers="bk-created"><time datetime="{{ booking.created_at|date:'c' }}">{{ row.created_times.user }}</time></td>
+            <td headers="bk-actions">
                 {% if booking.status == "active" %}
                     <a href="{% url 'booking_cancel' booking.pk %}">Отменить</a>
                 {% endif %}
@@ -45,5 +56,6 @@
     {% empty %}
         <tr><td colspan="7">У вас пока нет бронирований.</td></tr>
     {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

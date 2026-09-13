@@ -27,9 +27,9 @@
 
     <section aria-labelledby="room-actions-heading">
         <h2 id="room-actions-heading">Действия</h2>
-        <form method="post" action="{% url 'booking_create' %}">
+        <form method="post" action="{% url 'cart_add' room.pk %}">
             {% csrf_token %}
-            <input type="hidden" name="room" value="{{ room.pk }}">
+            <input type="hidden" name="next" value="{% url 'room_detail' room.pk %}">
             <p>
                 <label for="quantity">Количество ночей:</label>
                 <input id="quantity" name="quantity" type="number" min="1" max="30" value="1" required>
@@ -38,7 +38,7 @@
                 <button type="submit" title="Добавить номер {{ room.room_number }} в корзину" aria-label="Добавить номер {{ room.room_number }} в корзину">Добавить в корзину</button>
             </p>
         </form>
-        <p><a href="{% url 'booking_create' %}">Или оформить бронирование с датами</a> | <a href="{% url 'booking_user' %}" title="Перейти в корзину">Перейти в корзину</a></p>
+        <p><a href="{% url 'booking_create' %}">Или оформить бронирование с датами</a> | <a href="{% url 'cart_view' %}" title="Перейти в корзину">Перейти в корзину</a></p>
     </section>
 </article>
 {% endblock %}

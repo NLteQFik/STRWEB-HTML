@@ -3,71 +3,53 @@
 {% block content %}
 <section id="cart" aria-labelledby="cart-heading">
     <h1 id="cart-heading">Корзина заказа</h1>
-    <p><a href="{% url 'room_list' %}">Перейти в каталог номеров</a> | <a href="{% url 'booking_user' %}">Живой аналог: мои бронирования</a></p>
-    <p><em>Демо-шаблон без бэкенда (по решению «только HTML»): кнопки ведут на существующие бронирования/оплату.</em></p>
+    <p><a href="{% url 'room_list' %}">Перейти в каталог номеров</a> | <a href="{% url 'booking_user' %}">Мои бронирования</a></p>
 
-    <article id="cart-item-101">
-        <h2>Номер 101 — Стандарт</h2>
-        <p>Уютный номер с двуспальной кроватью, <abbr title="Wireless Fidelity">Wi-Fi</abbr> и завтраком.</p>
-        <p><strong>Цена за ночь:</strong> 100 BYN</p>
-        <p><strong>Количество ночей:</strong> 2</p>
-        <p><strong>Сумма по позиции:</strong> 200 BYN</p>
-        <figure>
-            <img src="https://dummyimage.com/240x150/4682b4/fff&amp;text=Room+101" alt="Фото номера 101" width="240" loading="lazy">
-            <figcaption>Номер 101</figcaption>
-        </figure>
-        <section aria-label="Управление позицией 101">
-            <form method="post" action="{% url 'booking_user' %}">
-                {% csrf_token %}
-                <button type="submit" title="Уменьшить количество" aria-label="Уменьшить количество ночей номера 101">−</button>
-            </form>
-            <p><output>2</output></p>
-            <form method="post" action="{% url 'booking_user' %}">
-                {% csrf_token %}
-                <button type="submit" title="Увеличить количество" aria-label="Увеличить количество ночей номера 101">+</button>
-            </form>
-            <form method="post" action="{% url 'booking_user' %}">
-                {% csrf_token %}
-                <button type="submit" title="Удалить из корзины" aria-label="Удалить номер 101 из корзины">Удалить из корзины</button>
-            </form>
-        </section>
-        <hr>
-    </article>
-
-    <article id="cart-item-202">
-        <h2>Номер 202 — Люкс</h2>
-        <p>Просторный люкс с <mark>видом на город</mark> и мини-баром.</p>
-        <p><strong>Цена за ночь:</strong> 250 BYN</p>
-        <p><strong>Количество ночей:</strong> 1</p>
-        <p><strong>Сумма по позиции:</strong> 250 BYN</p>
-        <figure>
-            <img src="https://dummyimage.com/240x150/1e3a5f/fff&amp;text=Room+202" alt="Фото номера 202" width="240" loading="lazy">
-            <figcaption>Номер 202</figcaption>
-        </figure>
-        <section aria-label="Управление позицией 202">
-            <form method="post" action="{% url 'booking_user' %}">
-                {% csrf_token %}
-                <button type="submit" title="Уменьшить количество" aria-label="Уменьшить количество ночей номера 202">−</button>
-            </form>
-            <p><output>1</output></p>
-            <form method="post" action="{% url 'booking_user' %}">
-                {% csrf_token %}
-                <button type="submit" title="Увеличить количество" aria-label="Увеличить количество ночей номера 202">+</button>
-            </form>
-            <form method="post" action="{% url 'booking_user' %}">
-                {% csrf_token %}
-                <button type="submit" title="Удалить из корзины" aria-label="Удалить номер 202 из корзины">Удалить из корзины</button>
-            </form>
-        </section>
-        <hr>
-    </article>
-
-    <p><strong>Итого:</strong> 450 BYN</p>
-    <p>
-        <a href="{% url 'payment_list' %}" title="Перейти к оплате">Оплатить</a>
-        {% if not user.is_authenticated %}
-            | <em>Для оплаты необходимо <a href="{% url 'login' %}">войти</a> или <a href="{% url 'register' %}">зарегистрироваться</a>.</em>
-        {% endif %}
-    </p>
+    {% if cart_items %}
+        {% for item in cart_items %}
+        <article id="cart-item-{{ item.room.pk }}">
+            <h2>
+                <a href="{% url 'room_detail' item.room.pk %}">Номер {{ item.room.room_number }} — {{ item.room.category.name }}</a>
+            </h2>
+            <p>{{ item.room.category.description|truncatewords:20 }}</p>
+            <p><strong>Цена за ночь:</strong> {{ item.room.category.base_price }} BYN</p>
+            <p><strong>Количество ночей:</strong> {{ item.quantity }}</p>
+            <p><strong>Сумма по позиции:</strong> {{ item.line_total }} BYN</p>
+            <figure>
+                {% if item.room.photo %}
+                    <img src="{{ item.room.photo.url }}" alt="Фото номера {{ item.room.room_number }}" width="240" loading="lazy">
+                {% else %}
+                    <img src="https://dummyimage.com/240x150/4682b4/fff&amp;text=Room+{{ item.room.room_number }}" alt="Фото номера {{ item.room.room_number }}" width="240" loading="lazy">
+                {% endif %}
+                <figcaption>Номер {{ item.room.room_number }}</figcaption>
+            </figure>
+            <section aria-label="Управление позицией {{ item.room.room_number }}">
+                <form method="post" action="{% url 'cart_decrease' item.room.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" title="Уменьшить количество" aria-label="Уменьшить количество ночей номера {{ item.room.room_number }}">−</button>
+                </form>
+                <p><output>{{ item.quantity }}</output></p>
+                <form method="post" action="{% url 'cart_increase' item.room.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" title="Увеличить количество" aria-label="Увеличить количество ночей номера {{ item.room.room_number }}">+</button>
+                </form>
+                <form method="post" action="{% url 'cart_remove' item.room.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" title="Удалить из корзины" aria-label="Удалить номер {{ item.room.room_number }} из корзины">Удалить из корзины</button>
+                </form>
+            </section>
+            <hr>
+        </article>
+        {% endfor %}
+        <p><strong>Итого:</strong> {{ cart_total }} BYN</p>
+        <p>
+            <a href="{% url 'cart_payment' %}" title="Перейти к оплате">Оплатить</a>
+            {% if not user.is_authenticated %}
+                | <em>Для оплаты необходимо <a href="{% url 'login' %}?next={% url 'cart_payment' %}">войти</a> или <a href="{% url 'register' %}">зарегистрироваться</a>.</em>
+            {% endif %}
+        </p>
+    {% else %}
+        <p>Корзина пуста. Добавьте номера из <a href="{% url 'room_list' %}">каталога</a>.</p>
+    {% endif %}
 </section>
 {% endblock %}

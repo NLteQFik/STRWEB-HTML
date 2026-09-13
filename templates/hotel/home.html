@@ -11,34 +11,28 @@
 
 <section id="banners" aria-labelledby="banners-heading">
     <h2 id="banners-heading">Реклама и спецпредложения</h2>
+    {% for banner in banners %}
     <figure>
-        <a href="{% url 'room_list' %}" title="Перейти: Раннее бронирование −15%">
+        {% if banner.link_url %}
+        <a href="{{ banner.link_url }}" title="Перейти: {{ banner.title }}">
             <picture>
-                <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=960&amp;h=320&amp;fit=crop">
-                <source media="(max-width: 767px)" srcset="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=480&amp;h=640&amp;fit=crop">
-                <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=960&amp;h=320&amp;fit=crop" alt="Баннер: люкс со скидкой" width="960" height="320" loading="eager">
+                <source media="(min-width: 768px)" srcset="{{ banner.image_url }}">
+                <source media="(max-width: 767px)" srcset="{{ banner.image_url }}">
+                <img src="{{ banner.image_url }}" alt="{{ banner.alt_text|default:banner.title }}" width="960" height="320" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
             </picture>
         </a>
-        <figcaption>Раннее бронирование −15%</figcaption>
-    </figure>
-    <figure>
-        <a href="{% url 'extra_service_list' %}" title="Перейти: SPA и завтраки">
-            <picture>
-                <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=960&amp;h=320&amp;fit=crop">
-                <source media="(max-width: 767px)" srcset="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=480&amp;h=640&amp;fit=crop">
-                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=960&amp;h=320&amp;fit=crop" alt="Баннер: SPA и завтраки в подарок" width="960" height="320" loading="lazy">
-            </picture>
-        </a>
-        <figcaption>SPA и завтраки в подарок</figcaption>
-    </figure>
-    <figure>
+        {% else %}
         <picture>
-            <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=960&amp;h=320&amp;fit=crop">
-            <source media="(max-width: 767px)" srcset="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=480&amp;h=640&amp;fit=crop">
-            <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=960&amp;h=320&amp;fit=crop" alt="Баннер: семейные номера" width="960" height="320" loading="lazy">
+            <source media="(min-width: 768px)" srcset="{{ banner.image_url }}">
+            <source media="(max-width: 767px)" srcset="{{ banner.image_url }}">
+            <img src="{{ banner.image_url }}" alt="{{ banner.alt_text|default:banner.title }}" width="960" height="320" loading="lazy">
         </picture>
-        <figcaption>Семейные номера — 3-я ночь бесплатно</figcaption>
+        {% endif %}
+        <figcaption>{{ banner.title }}</figcaption>
     </figure>
+    {% empty %}
+        <p>Пока нет активных баннеров.</p>
+    {% endfor %}
 </section>
 
 <section aria-labelledby="tz-heading">
@@ -139,33 +133,27 @@
 </section>
 
 <section id="cart-demo" aria-labelledby="cart-demo-heading">
-    <h2 id="cart-demo-heading">Корзина заказа (демо без бэкенда)</h2>
-    <p>Полный интерактив — в шаблонах <samp>hotel/cart.html</samp> и <samp>hotel/cart_payment.html</samp>. Здесь — якорь для боковой навигации.</p>
-    <p><a href="{% url 'booking_user' %}" title="Перейти к бронированиям (аналог корзины)">Перейти к бронированиям</a> | <a href="{% url 'payment_list' %}" title="Перейти к оплате">Перейти к оплате</a></p>
+    <h2 id="cart-demo-heading">Корзина заказа</h2>
+    <p>Живая корзина на сессиях: <a href="{% url 'cart_view' %}" title="Перейти в корзину">перейти в корзину</a>, оплата — <a href="{% url 'cart_payment' %}" title="Перейти к оплате">перейти к оплате</a>.</p>
+    <p><a href="{% url 'booking_user' %}" title="Перейти к бронированиям">Мои бронирования</a> | <a href="{% url 'payment_list' %}" title="Перейти к оплате">Платежи</a></p>
 </section>
 
 <section id="partners" aria-labelledby="partners-heading">
     <h2 id="partners-heading">Компании-партнёры</h2>
+    {% if partners %}
     <ul>
+        {% for partner in partners %}
         <li>
             <figure>
-                <a href="https://www.booking.com/" rel="noopener noreferrer" target="_blank" title="Сайт Booking.com"><img src="https://dummyimage.com/160x80/003580/fff&amp;text=Booking" alt="Логотип партнёра Booking.com" width="160" height="80" loading="lazy"></a>
-                <figcaption><a href="https://www.booking.com/" rel="noopener noreferrer">Booking.com</a></figcaption>
+                <a href="{{ partner.website_url }}" rel="noopener noreferrer" target="_blank" title="Сайт {{ partner.name }}"><img src="{{ partner.logo_url }}" alt="Логотип партнёра {{ partner.name }}" width="160" height="80" loading="lazy"></a>
+                <figcaption><a href="{{ partner.website_url }}" rel="noopener noreferrer">{{ partner.name }}</a></figcaption>
             </figure>
         </li>
-        <li>
-            <figure>
-                <a href="https://www.tripadvisor.com/" rel="noopener noreferrer" target="_blank" title="Сайт Tripadvisor"><img src="https://dummyimage.com/160x80/00aa6c/fff&amp;text=TripAd" alt="Логотип партнёра Tripadvisor" width="160" height="80" loading="lazy"></a>
-                <figcaption><a href="https://www.tripadvisor.com/" rel="noopener noreferrer">Tripadvisor</a></figcaption>
-            </figure>
-        </li>
-        <li>
-            <figure>
-                <a href="https://www.airbnb.com/" rel="noopener noreferrer" target="_blank" title="Сайт Airbnb"><img src="https://dummyimage.com/160x80/ff5a5f/fff&amp;text=Airbnb" alt="Логотип партнёра Airbnb" width="160" height="80" loading="lazy"></a>
-                <figcaption><a href="https://www.airbnb.com/" rel="noopener noreferrer">Airbnb</a></figcaption>
-            </figure>
-        </li>
+        {% endfor %}
     </ul>
+    {% else %}
+        <p>Список партнёров пока не заполнен.</p>
+    {% endif %}
 </section>
 
 <section aria-labelledby="extra-heading">

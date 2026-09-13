@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect, render
 
 from ..forms import CompanyInfoForm
-from ..models import Article, CompanyInfo, RoomCategory, Room
+from ..models import Article, Banner, CompanyInfo, Partner, RoomCategory, Room
 from ..services import get_external_data, get_weather_data
 from .auth import build_common_time_context, dual_timezone_display, is_client
 
@@ -46,6 +46,8 @@ def home_view(request):
         "latest_article": latest_article,
         "categories": categories,
         "rooms": rooms,
+        "banners": Banner.objects.filter(is_active=True).order_by("sort_order", "id"),
+        "partners": Partner.objects.filter(is_active=True).order_by("sort_order", "id"),
         "can_book": is_client(request.user) or request.user.is_superuser,
         "weather_data": get_weather_data(city="Minsk"),
         "currency_data": get_external_data(base="BYN"),
