@@ -33,7 +33,7 @@
                 </picture>
                 <figcaption>{{ article.title }}</figcaption>
             </figure>
-            <p><strong>Дата публикации:</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sP' }}" pubdate>UTC {{ times.utc }} | Локально: {{ times.user }}</time></p>
+            <p><strong>Дата публикации:</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sO' }}" itemprop="datePublished">UTC {{ times.utc }} | Локально: {{ times.user }}</time></p>
             <p><a href="{% url 'article_detail' article.pk %}" title="Читать полную статью: {{ article.title }}">Читать далее →</a></p>
             <details>
                 <summary>Поделиться</summary>

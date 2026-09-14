@@ -48,7 +48,7 @@
     <section id="about-history" aria-labelledby="about-history-heading">
         <h2 id="about-history-heading">История по годам</h2>
         <p>{{ company_info.history_by_years|linebreaksbr }}</p>
-        <table border="1" cellpadding="8" cellspacing="0">
+        <table>
             <caption>Хронология развития Aurora Hotel</caption>
             <colgroup>
                 <col span="2">
@@ -84,7 +84,7 @@
             </tbody>
         </table>
 
-        <table border="1" cellpadding="8" cellspacing="0">
+        <table>
             <caption>Сводная таблица показателей</caption>
             <colgroup>
                 <col span="2">
@@ -107,8 +107,8 @@
                 </tr>
                 <tr>
                     <th id="stat-rooms-occ" scope="row" headers="stat-metric stat-rooms-group">Загрузка, %</th>
-                    <td headers="stat-2024 stat-rooms-occ">78 <progress value="78" max="100" title="Загрузка 2024: 78%">78%</progress></td>
-                    <td headers="stat-2025 stat-rooms-occ">82 <progress value="82" max="100" title="Загрузка 2025: 82%">82%</progress></td>
+                    <td headers="stat-2024 stat-rooms-occ">78</td>
+                    <td headers="stat-2025 stat-rooms-occ">82</td>
                 </tr>
                 <tr>
                     <th id="stat-service-group" scope="row" headers="stat-group" colspan="2">Средний рейтинг сервиса</th>
@@ -129,10 +129,10 @@
         </blockquote>
         <p><cite>World Wide Web Consortium (W3C)</cite></p>
 
-        <h3>Девиз компании (потенциальный перенос)</h3>
+        <h3>Девиз компании</h3>
         <p>Наше гостепри<wbr>имство — уютный дом для каждого гостя.</p>
 
-        <h3>Девиз компании (фиксированный перенос)</h3>
+        <h3>Наш девиз в стихах</h3>
         <p lang="ru">
             Гостиничный дом уютный,<br>
             Сервис здесь всегда на уровне,<br>
@@ -148,7 +148,7 @@
             <li>Подпишите регистрационную карту.</li>
         </ol>
 
-        <h3 id="about-html-demo">Пример HTML-кода</h3>
+        <h3 id="about-html-demo">Как выглядит номер в разметке</h3>
         <pre><code>&lt;section id="about-video"&gt;
   &lt;video controls width="640" height="360"&gt;
     &lt;source src="promo.mp4" type="video/mp4"&gt;
@@ -195,8 +195,8 @@
 
     <section aria-labelledby="about-meta-heading">
         <h2 id="about-meta-heading">Служебная информация</h2>
-        <p><strong>Дата добавления:</strong> <time datetime="{{ company_info.created_at|date:'Y-m-d\TH:i:sP' }}">{{ company_info.created_at|date:"d/m/Y" }}</time></p>
-        <p><strong>Дата изменения:</strong> <time datetime="{{ company_info.updated_at|date:'Y-m-d\TH:i:sP' }}">{{ company_info.updated_at|date:"d/m/Y" }}</time></p>
+        <p><strong>Дата добавления:</strong> <time datetime="{{ company_info.created_at|date:'Y-m-d\TH:i:sO' }}">{{ company_info.created_at|date:"d/m/Y" }}</time></p>
+        <p><strong>Дата изменения:</strong> <time datetime="{{ company_info.updated_at|date:'Y-m-d\TH:i:sO' }}">{{ company_info.updated_at|date:"d/m/Y" }}</time></p>
     </section>
 </article>
 {% else %}

@@ -31,7 +31,7 @@
                 <article>
                     <h2>{{ code.code }}</h2>
                     <p><strong>Скидка:</strong> {{ code.discount_percent }}%</p>
-                    <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ code.created_at|date:'Y-m-d\TH:i:sP' }}">{{ code.created_at|date:"d/m/Y" }}</time></p>
+                    <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ code.created_at|date:'Y-m-d\TH:i:sO' }}">{{ code.created_at|date:"d/m/Y" }}</time></p>
                     {% if user.is_superuser %}
                         <p><a href="{% url 'promocode_update' code.pk %}">Редактировать</a> | <a href="{% url 'promocode_delete' code.pk %}">Удалить</a></p>
                     {% endif %}
@@ -51,7 +51,7 @@
                 <article>
                     <h2>{{ code.code }}</h2>
                     <p><strong>Скидка:</strong> {{ code.discount_percent }}%</p>
-                    <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ code.created_at|date:'Y-m-d\TH:i:sP' }}">{{ code.created_at|date:"d/m/Y" }}</time></p>
+                    <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ code.created_at|date:'Y-m-d\TH:i:sO' }}">{{ code.created_at|date:"d/m/Y" }}</time></p>
                     {% if user.is_superuser %}
                         <p><a href="{% url 'promocode_update' code.pk %}">Редактировать</a> | <a href="{% url 'promocode_delete' code.pk %}">Удалить</a></p>
                     {% endif %}

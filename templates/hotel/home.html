@@ -45,31 +45,31 @@
 </section>
 
 <section id="adaptive-demo" aria-labelledby="adaptive-demo-heading">
-    <h2 id="adaptive-demo-heading">Адаптивные изображения</h2>
-    <p>Десктопная и мобильная версии — разные файлы: откройте страницу с узким экраном.</p>
+    <h2 id="adaptive-demo-heading">Фотогалерея</h2>
+    <p>Загляните в холл и номера Aurora Hotel.</p>
     <figure>
         <picture>
             <source media="(min-width: 768px)" srcset="{% static 'hotel/img/demo-1-desktop.jpg' %}" width="960">
             <source media="(max-width: 767px)" srcset="{% static 'hotel/img/demo-1-mobile.jpg' %}" width="480">
-            <img src="{% static 'hotel/img/demo-1-desktop.jpg' %}" alt="Демонстрация адаптивного изображения: холл отеля" width="960" height="320" loading="lazy">
+            <img src="{% static 'hotel/img/demo-1-desktop.jpg' %}" alt="Холл отеля Aurora Hotel" width="960" height="320" loading="lazy">
         </picture>
-        <figcaption>Холл отеля — 960×320 / 480×640</figcaption>
+        <figcaption>Холл отеля</figcaption>
     </figure>
     <figure>
         <picture>
             <source media="(min-width: 768px)" srcset="{% static 'hotel/img/demo-2-desktop.jpg' %}" width="960">
             <source media="(max-width: 767px)" srcset="{% static 'hotel/img/demo-2-mobile.jpg' %}" width="480">
-            <img src="{% static 'hotel/img/demo-2-desktop.jpg' %}" alt="Демонстрация адаптивного изображения: номер отеля" width="960" height="320" loading="lazy">
+            <img src="{% static 'hotel/img/demo-2-desktop.jpg' %}" alt="Номер отеля Aurora Hotel" width="960" height="320" loading="lazy">
         </picture>
-        <figcaption>Номер отеля — 960×320 / 480×640</figcaption>
+        <figcaption>Уютный номер</figcaption>
     </figure>
 </section>
 
 <section aria-labelledby="tz-heading">
     <h2 id="tz-heading">Дата и часовой пояс</h2>
     <p><strong>Ваш пояс:</strong> {{ user_timezone_name }}</p>
-    <p><strong>Сейчас:</strong> <time datetime="{{ user_now|date:'Y-m-d\TH:i:sP' }}">{{ user_now|date:"d/m/Y H:i" }}</time> ({{ weekday_name }})</p>
-    <p><strong>UTC:</strong> <time datetime="{{ user_now|date:'Y-m-d\TH:i:sP' }}">{{ current_date_utc }}</time></p>
+    <p><strong>Сейчас:</strong> <time datetime="{{ user_now|date:'Y-m-d\TH:i:sO' }}">{{ user_now|date:"d/m/Y H:i" }}</time> ({{ weekday_name }})</p>
+    <p><strong>UTC:</strong> <time datetime="{{ user_now|date:'Y-m-d\TH:i:sO' }}">{{ current_date_utc }}</time></p>
     <p><strong>Локальное время:</strong> {{ current_datetime_user }}</p>
     <form method="get" action="{% url 'set_timezone' %}">
         <fieldset>
@@ -113,8 +113,8 @@
             {% endif %}
             <figcaption>{{ latest_article.title }}</figcaption>
         </figure>
-        <p><strong>Дата публикации (UTC):</strong> <time datetime="{{ latest_article.created_at|date:'Y-m-d\TH:i:sP' }}">{{ latest_article_times.utc }}</time></p>
-        <p><strong>Дата публикации (ваша TZ):</strong> <time datetime="{{ latest_article.created_at|date:'Y-m-d\TH:i:sP' }}">{{ latest_article_times.user }}</time></p>
+        <p><strong>Дата публикации (UTC):</strong> <time datetime="{{ latest_article.created_at|date:'Y-m-d\TH:i:sO' }}">{{ latest_article_times.utc }}</time></p>
+        <p><strong>Дата публикации (ваша TZ):</strong> <time datetime="{{ latest_article.created_at|date:'Y-m-d\TH:i:sO' }}">{{ latest_article_times.user }}</time></p>
         <p><a href="{% url 'article_detail' latest_article.pk %}" title="Читать полную статью: {{ latest_article.title }}">Читать далее →</a></p>
     </article>
     {% else %}

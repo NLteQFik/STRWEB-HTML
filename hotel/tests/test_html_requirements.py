@@ -83,7 +83,7 @@ def test_about_html_tags(seed_data):
         "<blockquote", "<pre><code>", "<abbr", "<del", "<ins",
         "<sub>", "<sup>", "<details>", "<summary>", "<dl>",
         'headers="hist-from', "colspan", "rowspan",
-        "<tfoot>", "<colgroup>", "<progress", "<wbr>",
+        "<tfoot>", "<colgroup>", "<wbr>",
         "<address", "download=",
     ]:
         assert snippet in response.content.decode(), snippet
@@ -111,13 +111,13 @@ def test_article_pages_tags(seed_data):
     response = client.get("/articles/")
     assert response.status_code == 200
     content = response.content.decode()
-    for snippet in ["<picture>", "<time", "pubdate", "<details>", "<figure>"]:
+    for snippet in ["<picture>", "<time", "datePublished", "<details>", "<figure>"]:
         assert snippet in content, snippet
     article = Article.objects.first()
     detail = client.get(f"/articles/{article.pk}/")
     assert detail.status_code == 200
     detail_content = detail.content.decode()
-    for snippet in ["<time", "pubdate", "<details>", "<figure>"]:
+    for snippet in ["<time", "datePublished", "<details>", "<figure>"]:
         assert snippet in detail_content, snippet
 
 

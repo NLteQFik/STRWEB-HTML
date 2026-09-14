@@ -62,8 +62,8 @@
     <hr>
     <section aria-label="Информационные виджеты">
         <p><strong>Сегодня:</strong> {{ today_label }} | <strong>Таймзона:</strong> {{ user_timezone_name }}</p>
-        <p><strong>Текущая дата (TZ):</strong> <time id="current-date-local" datetime="{{ user_now|date:'Y-m-d\TH:i:sP' }}">{{ user_now|date:"d/m/Y" }}</time></p>
-        <p><strong>Текущая дата (UTC):</strong> <time id="current-date-utc" datetime="{{ user_now|date:'Y-m-d\TH:i:sP' }}">{{ current_date_utc }}</time></p>
+        <p><strong>Текущая дата (TZ):</strong> <time id="current-date-local" datetime="{{ user_now|date:'Y-m-d\TH:i:sO' }}">{{ user_now|date:"d/m/Y" }}</time></p>
+        <p><strong>Текущая дата (UTC):</strong> <time id="current-date-utc" datetime="{{ user_now|date:'Y-m-d\TH:i:sO' }}">{{ current_date_utc }}</time></p>
         <p><strong>Валюта:</strong> цены указаны в BYN; курсы <abbr title="Национальный банк Республики Беларусь">НБРБ</abbr> смотрите на <a href="{% url 'home' %}#extra-heading">главной странице</a>.</p>
         <form method="get" action="{% url 'set_timezone' %}">
             <fieldset>
@@ -99,7 +99,7 @@
         <ul>
             <li><a href="{% url 'home' %}#company-logo">Логотип</a></li>
             <li><a href="{% url 'home' %}#banners">Баннеры</a></li>
-            <li><a href="{% url 'home' %}#adaptive-demo">Адаптивные изображения</a></li>
+            <li><a href="{% url 'home' %}#adaptive-demo">Фотогалерея</a></li>
             <li><a href="{% url 'home' %}#catalog">Каталог</a></li>
             <li><a href="{% url 'about' %}#about-video">Видео</a></li>
             <li><a href="{% url 'about' %}#about-certificate">Сертификат</a></li>
@@ -139,17 +139,17 @@
         <a href="mailto:info@aurora-hotel.example" title="Написать в Aurora Hotel">info@aurora-hotel.example</a>
     </address>
     <p>
-        <span lang="en" contenteditable="true" spellcheck="true">Guest first — service always.</span>
-        <span hidden>Служебный скрытый текст (атрибут hidden)</span>
+        <span lang="en" contenteditable="true" spellcheck="true">Welcome to Aurora Hotel.</span>
+        <span hidden>Aurora Hotel, Минск</span>
     </p>
     <p>
-        Горячая <dfn title="key">клавиша</dfn> админ-панели: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd>.
-        Пример вывода: <samp>HTTP/1.1 200 OK</samp>.
-        Переменная: <var>hotel_name</var> = «Aurora Hotel».
+        <dfn title="check-in">Заезд</dfn> — с 14:00, выезд — до 12:00.
+        Телефон ресепшена: <kbd>+375 29 000-00-00</kbd>.
+        Код брони из письма: <var>booking_code</var>. Статус: <samp>Подтверждено</samp>.
     </p>
     <p>
-        <q cite="https://developer.mozilla.org/ru/docs/Web/HTML" lang="ru">HTML — это язык разметки для структурирования веб-страниц.</q>
-        — <cite>MDN Web Docs</cite>
+        <q cite="#review-1" lang="ru">Лучший вид на город и очень уютный номер!</q>
+        — <cite>Гость Анна</cite>
     </p>
 </footer>
 </body>

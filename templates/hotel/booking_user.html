@@ -23,7 +23,7 @@
 
 <h2>Мои бронирования</h2>
 <p><a href="{% url 'cart_view' %}" title="Открыть корзину">Корзина</a> | <a href="{% url 'cart_payment' %}" title="Оплатить корзину">Оплатить корзину</a></p>
-<table border="1" cellpadding="6" cellspacing="0">
+<table>
     <caption>Мои бронирования Aurora Hotel</caption>
     <thead>
         <tr>
@@ -45,7 +45,7 @@
             <td headers="bk-out">{{ booking.check_out_date|date:"d/m/Y" }}</td>
             <td headers="bk-cost">{{ booking.total_cost }}</td>
             <td headers="bk-status">{{ booking.get_status_display }}</td>
-            <td headers="bk-created"><time datetime="{{ booking.created_at|date:'Y-m-d\TH:i:sP' }}">{{ row.created_times.user }}</time></td>
+            <td headers="bk-created"><time datetime="{{ booking.created_at|date:'Y-m-d\TH:i:sO' }}">{{ row.created_times.user }}</time></td>
             <td headers="bk-actions">
                 {% if booking.status == "active" %}
                     <a href="{% url 'booking_cancel' booking.pk %}">Отменить</a>

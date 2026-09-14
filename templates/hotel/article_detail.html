@@ -5,8 +5,8 @@
     <header>
         <p><a href="{% url 'article_list' %}">← Вернуться к списку новостей</a></p>
         <h1>{{ article.title }}</h1>
-        <p><strong>Создано (UTC):</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sP' }}" pubdate>{{ article_created_times.utc }}</time> | <strong>Локально:</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sP' }}">{{ article_created_times.user }}</time></p>
-        <p><strong>Обновлено (UTC):</strong> <time datetime="{{ article.updated_at|date:'Y-m-d\TH:i:sP' }}">{{ article_updated_times.utc }}</time> | <strong>Локально:</strong> {{ article_updated_times.user }}</p>
+        <p><strong>Создано (UTC):</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sO' }}" itemprop="datePublished">{{ article_created_times.utc }}</time> | <strong>Локально:</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sO' }}">{{ article_created_times.user }}</time></p>
+        <p><strong>Обновлено (UTC):</strong> <time datetime="{{ article.updated_at|date:'Y-m-d\TH:i:sO' }}">{{ article_updated_times.utc }}</time> | <strong>Локально:</strong> {{ article_updated_times.user }}</p>
     </header>
     <figure>
         {% if article.image %}
