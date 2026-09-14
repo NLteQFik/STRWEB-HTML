@@ -1,0 +1,82 @@
+{% extends "hotel/base.html" %}
+{% block title %}Каталог номеров — Aurora Hotel{% endblock %}
+{% block meta_description %}Публичный каталог номеров Aurora Hotel: цены, категории, статусы. Доступен всем гостям без входа.{% endblock %}
+{% block content %}
+<h1>Каталог номеров</h1>
+<p>Публичная витрина. Управление номерами (создание/редактирование/удаление) доступно только администратору в разделе «Управление номерами».</p>
+<p><a href="#catalog-table" title="Перейти к таблице каталога">К таблице</a></p>
+<form method="get">
+    <fieldset>
+        <legend>Фильтр номеров</legend>
+        <p>
+            <label for="catalog-q">Номер:</label>
+            <input id="catalog-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Номер или описание категории">
+            <label for="catalog-status">Статус:</label>
+            <select id="catalog-status" name="status">
+                <option value="">Все статусы</option>
+                <option value="free" {% if request.GET.status == "free" %}selected{% endif %}>Свободен</option>
+                <option value="occupied" {% if request.GET.status == "occupied" %}selected{% endif %}>Занят</option>
+                <option value="cleaning" {% if request.GET.status == "cleaning" %}selected{% endif %}>На уборке</option>
+            </select>
+            <label for="catalog-sort">Сортировка:</label>
+            <select id="catalog-sort" name="sort">
+                <option value="category__base_price">Цена категории ↑</option>
+                <option value="-category__base_price" {% if request.GET.sort == "-category__base_price" %}selected{% endif %}>Цена категории ↓</option>
+            </select>
+            <button type="submit">Применить</button>
+        </p>
+        <p>
+            <label for="catalog-min-price">Цена от:</label>
+            <input id="catalog-min-price" type="number" name="min_price" step="0.01" min="0" value="{{ request.GET.min_price }}">
+            <label for="catalog-max-price">Цена до:</label>
+            <input id="catalog-max-price" type="number" name="max_price" step="0.01" min="0" value="{{ request.GET.max_price }}">
+        </p>
+        <p>
+            <label><input type="checkbox" name="available_only" value="1" {% if request.GET.available_only == "1" %}checked{% endif %}> Только свободные</label>
+        </p>
+    </fieldset>
+</form>
+
+<table id="catalog-table" border="1" cellpadding="6" cellspacing="0">
+    <caption>Каталог номеров Aurora Hotel</caption>
+    <thead>
+        <tr>
+            <th id="rc-photo" scope="col">Фото</th>
+            <th id="rc-number" scope="col">Номер</th>
+            <th id="rc-status" scope="col">Статус</th>
+            <th id="rc-cat" scope="col">Категория</th>
+            <th id="rc-price" scope="col">Цена категории</th>
+            <th id="rc-actions" scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for room in rooms %}
+        <tr>
+            <td headers="rc-photo">
+                {% if room.photo %}
+                    <img src="{{ room.photo.url }}" alt="Фото номера {{ room.room_number }}" width="48" height="48" loading="lazy">
+                {% else %}
+                    <img src="https://dummyimage.com/200x150/4682b4/fff&amp;text=Room+{{ room.room_number }}" alt="Фото номера {{ room.room_number }}" width="48" height="48" loading="lazy">
+                {% endif %}
+            </td>
+            <th headers="rc-number" scope="row">{{ room.room_number }}</th>
+            <td headers="rc-status">{{ room.get_status_display }}</td>
+            <td headers="rc-cat">{{ room.category.name }}</td>
+            <td headers="rc-price">{{ room.category.base_price }}</td>
+            <td headers="rc-actions">
+                <a href="{% url 'room_catalog_detail' room.pk %}" title="Подробнее о номере {{ room.room_number }}">Детали</a> |
+                <a href="{% url 'cart_add' room.pk %}" title="Перейти к добавлению в корзину">В корзину</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6">Номера не найдены.</td></tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="row" colspan="5">Всего номеров в выборке</th>
+            <td>{{ rooms|length }}</td>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}

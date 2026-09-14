@@ -2,7 +2,7 @@
 {% block title %}Управление номерами{% endblock %}
 {% block content %}
 <h1>Номера — каталог</h1>
-<p><a href="{% url 'room_create' %}">Создать номер</a> | <a href="#cart-demo-rooms">Якорь: корзина</a></p>
+<p><a href="{% url 'room_create' %}">Создать номер</a> | <a href="#cart-demo-rooms" title="Перейти к разделу корзины">Корзина</a></p>
 <form method="get">
     <fieldset>
         <legend>Фильтр номеров</legend>
@@ -65,6 +65,6 @@
 </table>
 <section id="cart-demo-rooms" aria-label="Корзина">
     <h2>Корзина</h2>
-    <p>Демо-шаблоны: <samp>hotel/cart.html</samp> (список, +/−, удалить, оплатить) и <samp>hotel/cart_payment.html</samp> (таблица + форма оплаты). Живой аналог — <a href="{% url 'booking_user' %}">бронирования</a>.</p>
+    <p>Шаблоны корзины: <samp>hotel/cart.html</samp> (список, +/−, удалить, оплатить) и <samp>hotel/cart_payment.html</samp> (таблица + форма оплаты). Подробнее — <a href="{% url 'booking_user' %}">бронирования</a>.</p>
 </section>
 {% endblock %}

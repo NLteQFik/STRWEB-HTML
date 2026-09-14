@@ -29,7 +29,7 @@
             <td headers="pm-client">{{ payment.booking.client.full_name }}</td>
             <td headers="pm-amount">{{ payment.amount }}</td>
             <td headers="pm-status">{{ payment.get_status_display }}</td>
-            <td headers="pm-paid"><time datetime="{{ payment.paid_at|date:'c' }}">{{ payment.paid_at|date:"d/m/Y H:i" }}</time></td>
+            <td headers="pm-paid"><time datetime="{{ payment.paid_at|date:'Y-m-d\TH:i:sP' }}">{{ payment.paid_at|date:"d/m/Y H:i" }}</time></td>
             <td headers="pm-created">UTC {{ row.created_times.utc }} / {{ row.created_times.user }}</td>
             <td headers="pm-updated">UTC {{ row.updated_times.utc }} / {{ row.updated_times.user }}</td>
             <td headers="pm-actions">

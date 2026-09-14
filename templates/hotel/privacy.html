@@ -1,4 +1,5 @@
 {% extends "hotel/base.html" %}
+{% load static %}
 {% block title %}Политика конфиденциальности — Aurora Hotel{% endblock %}
 {% block meta_description %}Политика конфиденциальности Aurora Hotel: обработка и защита персональных данных гостей.{% endblock %}
 {% block content %}
@@ -25,7 +26,7 @@
     <section aria-labelledby="privacy-consent-heading">
         <h2 id="privacy-consent-heading">4. Согласие пользователя</h2>
         <p>Используя сайт, пользователь подтверждает согласие с условиями данной политики конфиденциальности.</p>
-        <p>Полный текст можно <a href="https://www.w3.org/" download="privacy_policy_aurora_hotel.txt" rel="noopener noreferrer">скачать в формате .txt</a>.</p>
+        <p>Полный текст можно <a href="{% static 'hotel/docs/privacy_policy.txt' %}" download="privacy_policy_aurora_hotel.txt">скачать в формате .txt</a>.</p>
     </section>
     <aside aria-label="Связанные документы">
         <h2>Дополнительно</h2>

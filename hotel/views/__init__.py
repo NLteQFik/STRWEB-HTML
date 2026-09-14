@@ -42,6 +42,8 @@ from .crud import (
     GlossaryUpdateView,
     GlossaryDeleteView,
     RoomListView,
+    RoomCatalogListView,
+    RoomCatalogDetailView,
     RoomDetailView,
     RoomCreateView,
     RoomUpdateView,

@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal, InvalidOperation
 from zoneinfo import ZoneInfo
 
 from django.contrib import messages
@@ -397,6 +398,63 @@ class RoomDeleteView(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
     template_name = "hotel/confirm_delete.html"
     success_url = reverse_lazy("room_list")
     raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(build_common_time_context(self.request))
+        return context
+
+
+class RoomCatalogListView(ListView):
+    """Публичная витрина номеров: доступна всем без входа (в отличие от RoomListView для superuser)."""
+
+    model = Room
+    template_name = "hotel/room_catalog_list.html"
+    context_object_name = "rooms"
+
+    def get_queryset(self):
+        apply_request_timezone(self.request)
+        queryset = Room.objects.select_related("category").all()
+        query = self.request.GET.get("q", "").strip()
+        status = self.request.GET.get("status", "").strip()
+        sort = self.request.GET.get("sort", "category__base_price")
+        min_price = self.request.GET.get("min_price", "").strip()
+        max_price = self.request.GET.get("max_price", "").strip()
+        available_only = self.request.GET.get("available_only") == "1"
+        if query:
+            queryset = queryset.filter(
+                Q(room_number__icontains=query) | Q(category__description__icontains=query)
+            )
+        if status in dict(Room.RoomStatus.choices):
+            queryset = queryset.filter(status=status)
+        if available_only:
+            queryset = queryset.filter(status=Room.RoomStatus.FREE)
+        if min_price:
+            try:
+                queryset = queryset.filter(category__base_price__gte=Decimal(min_price))
+            except InvalidOperation:
+                pass
+        if max_price:
+            try:
+                queryset = queryset.filter(category__base_price__lte=Decimal(max_price))
+            except InvalidOperation:
+                pass
+        if sort in {"category__base_price", "-category__base_price"}:
+            queryset = queryset.order_by(sort)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(build_common_time_context(self.request))
+        return context
+
+
+class RoomCatalogDetailView(DetailView):
+    """Публичная карточка номера: доступна всем без входа."""
+
+    model = Room
+    template_name = "hotel/room_catalog_detail.html"
+    context_object_name = "room"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

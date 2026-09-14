@@ -29,7 +29,7 @@
             <p><strong>Описание:</strong> {{ vacancy.description }}</p>
             <p><strong>Требования:</strong> {{ vacancy.requirements }}</p>
             <p><strong>Зарплата:</strong> {{ vacancy.salary_level }}</p>
-            <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ vacancy.created_at|date:'c' }}">{{ vacancy.created_at|date:"d/m/Y" }}</time></p>
+            <p><strong>Дата добавления (UTC):</strong> <time datetime="{{ vacancy.created_at|date:'Y-m-d\TH:i:sP' }}">{{ vacancy.created_at|date:"d/m/Y" }}</time></p>
             {% if user.is_superuser %}
                 <p><a href="{% url 'vacancy_update' vacancy.pk %}">Редактировать</a> | <a href="{% url 'vacancy_delete' vacancy.pk %}">Удалить</a></p>
             {% endif %}

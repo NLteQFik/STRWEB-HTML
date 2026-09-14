@@ -14,14 +14,15 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{% block twitter_title %}Aurora Hotel{% endblock %}">
     <title>{% block title %}Гостиница Aurora Hotel{% endblock %}</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='24'%3E🏨%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Ctext%20y='24'%20font-size='24'%3E%F0%9F%8F%A8%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body itemscope itemtype="https://schema.org/Hotel">
 <a id="top" href="#main-content" title="Перейти к основному содержимому" tabindex="0">К основному содержимому</a>
 
-<header role="banner">
+<header>
     <p>
-        <a href="{% url 'home' %}" itemprop="name" title="На главную Aurora Hotel">Aurora Hotel</a>
+        <a href="{% url 'home' %}" itemprop="name" title="На главную Aurora Hotel"><i class="fas fa-hotel" aria-hidden="true"></i> Aurora Hotel</a>
     </p>
     <nav aria-label="Горизонтальная навигация">
         <a href="{% url 'home' %}">Главная</a> |
@@ -32,13 +33,14 @@
         <a href="{% url 'vacancy_list' %}">Вакансии</a> |
         <a href="{% url 'glossary_list' %}">Словарь</a> |
         <a href="{% url 'extra_service_list' %}">Услуги</a> |
+        <a href="{% url 'room_catalog' %}" title="Публичный каталог номеров для всех гостей"><i class="fas fa-bed" aria-hidden="true"></i> Каталог</a> |
         <a href="{% url 'promocode_list' %}">Промокоды</a> |
         <a href="{% url 'privacy' %}">Политика конфиденциальности</a>
         {% if user.is_superuser %}
             | <a href="{% url 'client_list' %}">Клиенты</a>
             | <a href="{% url 'payment_list' %}">Платежи</a>
             | <a href="{% url 'booking_list' %}">Брони</a>
-            | <a href="{% url 'room_list' %}">Номера</a>
+            | <a href="{% url 'room_list' %}" title="Управление номерами (только для администратора)">Управление номерами</a>
             | <a href="{% url 'room_category_list' %}">Категории</a>
             | <a href="{% url 'hotel_analytics' %}">Аналитика</a>
             | <a href="{% url 'logout' %}">Выйти</a>
@@ -60,8 +62,9 @@
     <hr>
     <section aria-label="Информационные виджеты">
         <p><strong>Сегодня:</strong> {{ today_label }} | <strong>Таймзона:</strong> {{ user_timezone_name }}</p>
-        <p><strong>Текущая дата (ваша TZ):</strong> <time id="current-date-local">{{ user_now|date:"d/m/Y" }}</time></p>
-        <p><strong>Текущая дата (UTC):</strong> <time id="current-date-utc" datetime="{{ user_now|date:'c' }}">{{ current_date_utc }}</time></p>
+        <p><strong>Текущая дата (TZ):</strong> <time id="current-date-local" datetime="{{ user_now|date:'Y-m-d\TH:i:sP' }}">{{ user_now|date:"d/m/Y" }}</time></p>
+        <p><strong>Текущая дата (UTC):</strong> <time id="current-date-utc" datetime="{{ user_now|date:'Y-m-d\TH:i:sP' }}">{{ current_date_utc }}</time></p>
+        <p><strong>Валюта:</strong> цены указаны в BYN; курсы <abbr title="Национальный банк Республики Беларусь">НБРБ</abbr> смотрите на <a href="{% url 'home' %}#extra-heading">главной странице</a>.</p>
         <form method="get" action="{% url 'set_timezone' %}">
             <fieldset>
                 <legend>Смена часового пояса</legend>
@@ -69,12 +72,18 @@
                     <label for="tz-select">Пояс:</label>
                     <select id="tz-select" name="tz">
                         <option value="">Сменить...</option>
-                        <option value="Europe/Minsk">Минск</option>
-                        <option value="Europe/Moscow">Москва</option>
-                        <option value="Europe/London">Лондон</option>
-                        <option value="America/New_York">Нью-Йорк</option>
-                        <option value="Asia/Tokyo">Токио</option>
-                        <option value="Asia/Vladivostok">Владивосток</option>
+                        <optgroup label="Европа">
+                            <option value="Europe/Minsk">Минск</option>
+                            <option value="Europe/Moscow">Москва</option>
+                            <option value="Europe/London">Лондон</option>
+                        </optgroup>
+                        <optgroup label="Америка">
+                            <option value="America/New_York">Нью-Йорк</option>
+                        </optgroup>
+                        <optgroup label="Азия">
+                            <option value="Asia/Tokyo">Токио</option>
+                            <option value="Asia/Vladivostok">Владивосток</option>
+                        </optgroup>
                     </select>
                     <button type="submit">Сменить</button>
                 </p>
@@ -90,18 +99,19 @@
         <ul>
             <li><a href="{% url 'home' %}#company-logo">Логотип</a></li>
             <li><a href="{% url 'home' %}#banners">Баннеры</a></li>
+            <li><a href="{% url 'home' %}#adaptive-demo">Адаптивные изображения</a></li>
             <li><a href="{% url 'home' %}#catalog">Каталог</a></li>
             <li><a href="{% url 'about' %}#about-video">Видео</a></li>
             <li><a href="{% url 'about' %}#about-certificate">Сертификат</a></li>
             <li><a href="{% url 'employee_list' %}#feedback-form">Форма обратной связи</a></li>
             <li><a href="{% url 'employee_list' %}">Контакты</a></li>
-            <li><a href="https://www.w3.org/" rel="noopener noreferrer" target="_blank" title="Внешняя ссылка">W3C (внешняя ссылка)</a></li>
-            <li><a href="#cart-demo" title="Якорь на демонстрационную корзину">Якорь: корзина</a></li>
+            <li><a href="https://www.w3.org/" rel="noopener noreferrer" target="_blank" title="Открыть сайт W3C в новой вкладке">W3C</a></li>
+            <li><a href="{% url 'home' %}#cart-demo" title="Перейти к разделу корзины на главной">Корзина</a></li>
         </ul>
     </nav>
 </aside>
 
-<main id="main-content" role="main" tabindex="-1">
+<main id="main-content" tabindex="-1">
 {% if messages %}
     <section role="status" aria-live="polite" aria-label="Сообщения сайта">
         {% for message in messages %}
@@ -112,7 +122,7 @@
 {% block content %}{% endblock %}
 </main>
 
-<footer role="contentinfo">
+<footer>
     <p>
         <small>&copy; <time datetime="2026">2026</time> Aurora Hotel. Все права защищены.</small>
     </p>
@@ -123,9 +133,14 @@
         |
         <a href="#top" title="Вернуться наверх">Наверх ↑</a>
     </p>
+    <address>
+        г. Минск, пр-т Победителей, 1 —
+        <a href="tel:+375290000000" title="Позвонить в Aurora Hotel">+375 (29) 000-00-00</a>,
+        <a href="mailto:info@aurora-hotel.example" title="Написать в Aurora Hotel">info@aurora-hotel.example</a>
+    </address>
     <p>
         <span lang="en" contenteditable="true" spellcheck="true">Guest first — service always.</span>
-        <span hidden aria-hidden="true">Служебный скрытый текст (атрибут hidden)</span>
+        <span hidden>Служебный скрытый текст (атрибут hidden)</span>
     </p>
     <p>
         Горячая <dfn title="key">клавиша</dfn> админ-панели: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd>.

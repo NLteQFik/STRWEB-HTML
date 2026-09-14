@@ -45,7 +45,7 @@
             <td headers="bk-out">{{ booking.check_out_date|date:"d/m/Y" }}</td>
             <td headers="bk-cost">{{ booking.total_cost }}</td>
             <td headers="bk-status">{{ booking.get_status_display }}</td>
-            <td headers="bk-created"><time datetime="{{ booking.created_at|date:'c' }}">{{ row.created_times.user }}</time></td>
+            <td headers="bk-created"><time datetime="{{ booking.created_at|date:'Y-m-d\TH:i:sP' }}">{{ row.created_times.user }}</time></td>
             <td headers="bk-actions">
                 {% if booking.status == "active" %}
                     <a href="{% url 'booking_cancel' booking.pk %}">Отменить</a>

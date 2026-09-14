@@ -33,8 +33,12 @@
                 </picture>
                 <figcaption>{{ article.title }}</figcaption>
             </figure>
-            <p><strong>Дата публикации:</strong> <time datetime="{{ article.created_at|date:'c' }}">UTC {{ times.utc }} | Локально: {{ times.user }}</time></p>
+            <p><strong>Дата публикации:</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sP' }}" pubdate>UTC {{ times.utc }} | Локально: {{ times.user }}</time></p>
             <p><a href="{% url 'article_detail' article.pk %}" title="Читать полную статью: {{ article.title }}">Читать далее →</a></p>
+            <details>
+                <summary>Поделиться</summary>
+                <p><a href="mailto:?subject={{ article.title|urlencode }}&body={{ request.build_absolute_uri }}" title="Отправить ссылку на статью по почте">Отправить по почте</a></p>
+            </details>
             {% if user.is_superuser %}
                 <p><a href="{% url 'article_update' article.pk %}">Редактировать</a> | <a href="{% url 'article_delete' article.pk %}">Удалить</a></p>
             {% endif %}

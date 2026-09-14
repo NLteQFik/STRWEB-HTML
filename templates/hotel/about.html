@@ -1,4 +1,5 @@
 {% extends "hotel/base.html" %}
+{% load static %}
 {% block title %}О компании — Aurora Hotel{% endblock %}
 {% block meta_description %}Информация об Aurora Hotel: история, реквизиты, сертификат, видео-презентация.{% endblock %}
 {% block content %}
@@ -8,7 +9,7 @@
         <p><a href="{% url 'home' %}">← На главную</a></p>
         <h1 itemprop="name">Aurora Hotel</h1>
         <figure id="about-logo">
-            <img src="https://dummyimage.com/160x160/1e3a5f/fff&amp;text=Aurora" alt="Логотип Aurora Hotel" width="160" height="160" itemprop="logo" loading="eager">
+            <img src="{% static 'hotel/img/logo.svg' %}" alt="Логотип Aurora Hotel" width="160" height="160" itemprop="logo" loading="eager">
             <figcaption>Официальный логотип компании</figcaption>
         </figure>
         <p itemprop="description">
@@ -34,12 +35,12 @@
     <section id="about-video" aria-labelledby="about-video-heading">
         <h2 id="about-video-heading">Видео о компании</h2>
         <video controls width="640" height="360" preload="metadata" title="Видео-презентация Aurora Hotel">
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            <source src="{% static 'hotel/media/promo.mp4' %}" type="video/mp4">
             Ваш браузер не поддерживает элемент <code>video</code>.
         </video>
         <p>Аудио-приветствие для гостей:</p>
         <audio controls preload="none" title="Аудио-приветствие Aurora Hotel">
-            <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+            <source src="{% static 'hotel/media/greeting.wav' %}" type="audio/wav">
             Ваш браузер не поддерживает элемент <code>audio</code>.
         </audio>
     </section>
@@ -49,6 +50,10 @@
         <p>{{ company_info.history_by_years|linebreaksbr }}</p>
         <table border="1" cellpadding="8" cellspacing="0">
             <caption>Хронология развития Aurora Hotel</caption>
+            <colgroup>
+                <col span="2">
+                <col>
+            </colgroup>
             <thead>
                 <tr>
                     <th id="hist-period" colspan="2" scope="colgroup">Период</th>
@@ -81,6 +86,10 @@
 
         <table border="1" cellpadding="8" cellspacing="0">
             <caption>Сводная таблица показателей</caption>
+            <colgroup>
+                <col span="2">
+                <col span="2">
+            </colgroup>
             <thead>
                 <tr>
                     <th id="stat-group" scope="col">Группа</th>
@@ -98,8 +107,8 @@
                 </tr>
                 <tr>
                     <th id="stat-rooms-occ" scope="row" headers="stat-metric stat-rooms-group">Загрузка, %</th>
-                    <td headers="stat-2024 stat-rooms-occ">78</td>
-                    <td headers="stat-2025 stat-rooms-occ">82</td>
+                    <td headers="stat-2024 stat-rooms-occ">78 <progress value="78" max="100" title="Загрузка 2024: 78%">78%</progress></td>
+                    <td headers="stat-2025 stat-rooms-occ">82 <progress value="82" max="100" title="Загрузка 2025: 82%">82%</progress></td>
                 </tr>
                 <tr>
                     <th id="stat-service-group" scope="row" headers="stat-group" colspan="2">Средний рейтинг сервиса</th>
@@ -107,15 +116,21 @@
                     <td headers="stat-2025 stat-service-group">4.8</td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="2">Итого: рост номерного фонда</th>
+                    <td colspan="2">+15 номеров к 2025 году</td>
+                </tr>
+            </tfoot>
         </table>
 
         <blockquote cite="https://www.w3.org/">
             <p>«Веб для всех» — принцип доступности и открытости информации.</p>
         </blockquote>
-        <p>— <cite>World Wide Web Consortium (W3C)</cite></p>
+        <p><cite>World Wide Web Consortium (W3C)</cite></p>
 
         <h3>Девиз компании (потенциальный перенос)</h3>
-        <p><wbr>Гостиничный<wbr> дом<wbr> уютный,<wbr> сервис<wbr> здесь<wbr> всегда<wbr> на<wbr> уровне.</p>
+        <p>Наше гостепри<wbr>имство — уютный дом для каждого гостя.</p>
 
         <h3>Девиз компании (фиксированный перенос)</h3>
         <p lang="ru">
@@ -126,7 +141,7 @@
         </p>
 
         <h3>Порядок заселения</h3>
-        <ol>
+        <ol type="A" start="25">
             <li>Предъявите документ на ресепшене.</li>
             <li>Получите ключ-карту номера.</li>
             <li>Ознакомьтесь с правилами проживания.</li>
@@ -167,7 +182,7 @@
 Срок действия: с 01.06.2024 по 01.06.2027
 Орган по сертификации: БелГИСС, г. Минск</pre>
         <p>
-            <a href="https://www.w3.org/" download="certificate_info.txt" rel="noopener noreferrer">
+            <a href="{% static 'hotel/docs/requisites.txt' %}" download="requisites_aurora_hotel.txt">
                 Скачать документ с реквизитами (.txt)
             </a>
         </p>
@@ -180,8 +195,8 @@
 
     <section aria-labelledby="about-meta-heading">
         <h2 id="about-meta-heading">Служебная информация</h2>
-        <p><strong>Дата добавления:</strong> <time datetime="{{ company_info.created_at|date:'c' }}">{{ company_info.created_at|date:"d/m/Y" }}</time></p>
-        <p><strong>Дата изменения:</strong> <time datetime="{{ company_info.updated_at|date:'c' }}">{{ company_info.updated_at|date:"d/m/Y" }}</time></p>
+        <p><strong>Дата добавления:</strong> <time datetime="{{ company_info.created_at|date:'Y-m-d\TH:i:sP' }}">{{ company_info.created_at|date:"d/m/Y" }}</time></p>
+        <p><strong>Дата изменения:</strong> <time datetime="{{ company_info.updated_at|date:'Y-m-d\TH:i:sP' }}">{{ company_info.updated_at|date:"d/m/Y" }}</time></p>
     </section>
 </article>
 {% else %}

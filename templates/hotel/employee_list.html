@@ -5,13 +5,18 @@
 <section id="contacts" aria-labelledby="contacts-heading">
     <h1 id="contacts-heading">Контакты</h1>
     <p>Свяжитесь с сотрудниками <strong>Aurora Hotel</strong> по телефону или электронной почте.</p>
-    <p>Официальный сайт партнёров: <a href="https://www.booking.com/" rel="noopener noreferrer" target="_blank" title="Внешняя ссылка">booking.com</a></p>
+    <p>Официальный сайт партнёров: <a href="https://www.booking.com/" rel="noopener noreferrer" target="_blank" title="Открыть booking.com в новой вкладке">booking.com</a></p>
     <form method="get">
         <fieldset>
             <legend>Поиск сотрудников</legend>
             <p>
                 <label for="emp-q">ФИО:</label>
-                <input id="emp-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Поиск по ФИО">
+                <input id="emp-q" type="search" name="q" value="{{ request.GET.q }}" placeholder="Поиск по ФИО" list="emp-namelist" autocomplete="off">
+                <datalist id="emp-namelist">
+                    {% for employee in employees %}
+                        <option value="{{ employee.full_name }}">{{ employee.position }}</option>
+                    {% endfor %}
+                </datalist>
                 <label for="emp-sort">Сортировка:</label>
                 <select id="emp-sort" name="sort">
                     <option value="full_name">ФИО А-Я</option>
@@ -31,8 +36,10 @@
             <h2>{{ employee.full_name }}</h2>
             <p><strong>Должность:</strong> {{ employee.position }}</p>
             <p><strong>Описание работ:</strong> {{ employee.work_description }}</p>
-            <p><strong>Телефон:</strong> <a href="tel:{{ employee.phone }}" title="Позвонить {{ employee.full_name }}">{{ employee.phone }}</a></p>
-            <p><strong>Email:</strong> <a href="mailto:{{ employee.user.email }}" title="Написать {{ employee.full_name }}">{{ employee.user.email }}</a></p>
+            <address>
+                <strong>Телефон:</strong> <a href="tel:{{ employee.phone }}" title="Позвонить {{ employee.full_name }}">{{ employee.phone }}</a><br>
+                <strong>Email:</strong> <a href="mailto:{{ employee.user.email }}" title="Написать {{ employee.full_name }}">{{ employee.user.email }}</a>
+            </address>
             <figure>
                 <picture>
                     <source media="(min-width: 768px)" srcset="https://i.pravatar.cc/320?u=emp{{ employee.id }}">
@@ -56,7 +63,7 @@
 
 <section id="feedback-form" aria-labelledby="feedback-form-heading">
     <h2 id="feedback-form-heading">Форма обратной связи</h2>
-    <p>Демонстрация HTML-форм, элементов управления и клиентской валидации (демо без бэкенда).</p>
+    <p>Задайте вопрос через форму ниже — ответим по телефону или почте.</p>
     <form method="get" action="#feedback-form">
         <input type="hidden" name="form_id" value="contact-demo">
         <fieldset>

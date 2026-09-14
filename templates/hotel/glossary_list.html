@@ -29,7 +29,7 @@
             <details>
                 <summary>
                     <strong>{{ item.question }}</strong>
-                    — добавлено <time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:"d/m/Y" }}</time>
+                    — добавлено <time datetime="{{ item.created_at|date:'Y-m-d\TH:i:sP' }}">{{ item.created_at|date:"d/m/Y" }}</time>
                 </summary>
                 <p>{{ item.answer|linebreaksbr }}</p>
                 {% if user.is_superuser %}

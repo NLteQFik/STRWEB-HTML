@@ -5,8 +5,8 @@
     <header>
         <p><a href="{% url 'article_list' %}">← Вернуться к списку новостей</a></p>
         <h1>{{ article.title }}</h1>
-        <p><strong>Создано (UTC):</strong> <time datetime="{{ article.created_at|date:'c' }}">{{ article_created_times.utc }}</time> | <strong>Локально:</strong> <time datetime="{{ article.created_at|date:'c' }}">{{ article_created_times.user }}</time></p>
-        <p><strong>Обновлено (UTC):</strong> <time datetime="{{ article.updated_at|date:'c' }}">{{ article_updated_times.utc }}</time> | <strong>Локально:</strong> {{ article_updated_times.user }}</p>
+        <p><strong>Создано (UTC):</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sP' }}" pubdate>{{ article_created_times.utc }}</time> | <strong>Локально:</strong> <time datetime="{{ article.created_at|date:'Y-m-d\TH:i:sP' }}">{{ article_created_times.user }}</time></p>
+        <p><strong>Обновлено (UTC):</strong> <time datetime="{{ article.updated_at|date:'Y-m-d\TH:i:sP' }}">{{ article_updated_times.utc }}</time> | <strong>Локально:</strong> {{ article_updated_times.user }}</p>
     </header>
     <figure>
         {% if article.image %}
@@ -19,6 +19,10 @@
     <section aria-label="Текст статьи">
         <p>{{ article.full_text|linebreaksbr }}</p>
     </section>
+    <details>
+        <summary>Поделиться</summary>
+        <p><a href="mailto:?subject={{ article.title|urlencode }}&body={{ request.build_absolute_uri }}" title="Отправить ссылку на статью по почте">Отправить по почте</a></p>
+    </details>
     <footer>
         <p><a href="{% url 'article_list' %}">Назад к новостям</a></p>
     </footer>
