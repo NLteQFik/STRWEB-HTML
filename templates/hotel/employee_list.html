@@ -37,7 +37,7 @@
             <p><strong>Должность:</strong> {{ employee.position }}</p>
             <p><strong>Описание работ:</strong> {{ employee.work_description }}</p>
             <address>
-                <strong>Телефон:</strong> <a href="tel:{{ employee.phone }}" title="Позвонить {{ employee.full_name }}">{{ employee.phone }}</a><br>
+                <strong>Телефон:</strong> <a href="tel:{{ employee.phone|cut:" "|cut:"("|cut:")"|cut:"-" }}" title="Позвонить {{ employee.full_name }}">{{ employee.phone }}</a><br>
                 <strong>Email:</strong> <a href="mailto:{{ employee.user.email }}" title="Написать {{ employee.full_name }}">{{ employee.user.email }}</a>
             </address>
             <figure>

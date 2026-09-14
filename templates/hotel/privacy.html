@@ -28,6 +28,21 @@
         <p>Используя сайт, пользователь подтверждает согласие с условиями данной политики конфиденциальности.</p>
         <p>Полный текст можно <a href="{% static 'hotel/docs/privacy_policy.txt' %}" download="privacy_policy_aurora_hotel.txt">скачать в формате .txt</a>.</p>
     </section>
+    <section aria-labelledby="privacy-faq-heading">
+        <h2 id="privacy-faq-heading">5. Часто задаваемые вопросы</h2>
+        <details>
+            <summary>Как долго хранятся мои данные?</summary>
+            <p>Данные бронирования хранятся 3 года, после чего обезличиваются. Данные для рассылки удаляются сразу после отзыва согласия.</p>
+        </details>
+        <details>
+            <summary>Как запросить удаление данных?</summary>
+            <p>Напишите на <a href="mailto:info@aurora-hotel.example" title="Написать в Aurora Hotel">info@aurora-hotel.example</a> — ответим в течение 10 рабочих дней.</p>
+        </details>
+        <blockquote cite="#privacy-policy">
+            <p>«Защита персональных данных гостей — приоритет Aurora Hotel.»</p>
+        </blockquote>
+        <p><cite>Администрация Aurora Hotel</cite></p>
+    </section>
     <aside aria-label="Связанные документы">
         <h2>Дополнительно</h2>
         <p>См. также: <a href="{% url 'about' %}#about-certificate">сертификат компании</a>.</p>
